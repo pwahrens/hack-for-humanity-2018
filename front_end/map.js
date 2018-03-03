@@ -1,4 +1,5 @@
 var map;
+
 function initMap() {
     map = new google.maps.Map(document.getElementById('map'), {
         zoom: 2,
@@ -15,10 +16,28 @@ function initMap() {
     document.getElementById('searchButton').addEventListener('click', function() {
         geocodeAddress(geocoder, map);
     });
+
     // This example uses a local copy of the GeoJSON stored at
     // http://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/2.5_week.geojsonp
     script.src = 'https://developers.google.com/maps/documentation/javascript/examples/json/earthquake_GeoJSONP.js';
     document.getElementsByTagName('head')[0].appendChild(script);
+
+    /*
+    var australiaImage = {
+        url: 'https://www.shareicon.net/data/32x32/2016/09/30/837631_animal_512x512.png',
+        size: new google.maps.Size(32, 32),
+        origin: new google.maps.Point(0, 0),
+        anchor: new google.maps.Point(0, 32)
+    };
+    */
+
+    var marker = createMarker(
+        {lat: -25.363, lng: 131.044},
+        map,
+        "Hello, Australia!",
+        null,
+        "This country has Kangaroos"
+    )
 
     map.data.setStyle(function(feature) {
         var magnitude = feature.getProperty('mag');
@@ -26,6 +45,7 @@ function initMap() {
             icon: getCircle(magnitude)
         };
     });
+
 }
 
 function getCircle(magnitude) {
@@ -59,6 +79,10 @@ function geocodeAddress(geocoder, resultsMap) {
             alert('Geocode was not successful for the following reason: ' + status);
         }
     });
+}
+
+function createImage(url, size, origin, anchor) {
+
 }
 
 function createMarker(position, map, title, icon, content) {
