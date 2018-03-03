@@ -22,14 +22,33 @@ function initMap() {
     script.src = 'https://developers.google.com/maps/documentation/javascript/examples/json/earthquake_GeoJSONP.js';
     document.getElementsByTagName('head')[0].appendChild(script);
 
+
     /*
     var australiaImage = {
-        url: 'https://www.shareicon.net/data/32x32/2016/09/30/837631_animal_512x512.png',
-        size: new google.maps.Size(32, 32),
-        origin: new google.maps.Point(0, 0),
-        anchor: new google.maps.Point(0, 32)
+    url: 'https://www.shareicon.net/data/32x32/2016/09/30/837631_animal_512x512.png',
+    size: new google.maps.Size(32, 32),
+    origin: new google.maps.Point(0, 0),
+    anchor: new google.maps.Point(0, 32)
+};
+*/
+
+var marker = createMarker(
+    {lat: -25.363, lng: 131.044},
+    map,
+    "Hello, Australia!",
+    null,
+    "This country has Kangaroos"
+)
+
+map.data.setStyle(function(feature) {
+    var magnitude = feature.getProperty('mag');
+    return {
+        icon: getCircle(magnitude)
     };
+<<<<<<< HEAD
     */
+
+
 
     var marker = createMarker(
         {lat: -25.363, lng: 131.044},
@@ -39,14 +58,22 @@ function initMap() {
         "This country has Kangaroos"
     )
 
+
+
+    var markerCluster = new MarkerClusterer(map, markers,
+            {imagePath: 'https://developers.google.com/maps/documentation/javascript/examples/markerclusterer/m'});
+
     map.data.setStyle(function(feature) {
         var magnitude = feature.getProperty('mag');
         return {
             icon: getCircle(magnitude)
         };
     });
+=======
+});
+>>>>>>> origin/master
 
-    window.addEventListener("touchstart", touchHandler, false);
+window.addEventListener("touchstart", touchHandler, false);
 }
 
 function getCircle(magnitude) {
@@ -65,17 +92,20 @@ function eqfeed_callback(results) {
 }
 
 function geocodeAddress(geocoder, resultsMap) {
-    var country = document.getElementById('countryInput').value;
-    var city = document.getElementById('cityInput').value;
-    var address = city + ", " + country;
+   
+    var address = document.getElementById('locationInput').value;
 
     geocoder.geocode({'address': address}, function(results, status) {
         if (status === 'OK') {
             resultsMap.setCenter(results[0].geometry.location);
-            resultsMap.setZoom(10);
 
+            resultsMap.fitBounds(results[0].geometry.viewport);
         } else {
-            alert('Geocode was not successful for the following reason: ' + status);
+            if (status == 'ZERO_RESULTS') {
+                alert('No cities or countries found during query');
+            } else {
+                alert('We could not find the city and/or country for the following reason: ' + status);
+            }
         }
     });
 }
@@ -114,6 +144,6 @@ function removeMarker(marker) {
 // prevent multitouch
 function touchHandler(event){
     if(event.touches.length > 1){
-         event.preventDefault()
+        event.preventDefault()
     }
 }

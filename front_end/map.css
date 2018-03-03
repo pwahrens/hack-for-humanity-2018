@@ -25,12 +25,7 @@ html, body {
 }
 
 #cityInput {
-	border-radius: 10px 0px 0px 10px;
-}
-
-#countryInput {
-	border-radius: 0px 10px 10px 0px;
-	width: 120px;
+	border-radius: 10px 10px 10px 10px;
 }
 
 #searchButton {
