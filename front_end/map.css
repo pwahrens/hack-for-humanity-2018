@@ -1,0 +1,39 @@
+/* Always set the map height explicitly to define the size of the div
+ * element that contains the map. */
+#map {
+  height: calc(100% - 39pt);
+  margin-top: 39pt;
+}
+/* Optional: Makes the sample page fill the window. */
+html, body {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+}
+
+.navbar {
+	position: fixed;
+	top: 0;
+	left: 0;
+	z-index: 1000000;
+	width: 100%;
+}
+
+
+.container {
+	width: 100%;
+}
+
+#cityInput {
+	border-radius: 10px 0px 0px 10px;
+}
+
+#countryInput {
+	border-radius: 0px 10px 10px 0px;
+	width: 120px;
+}
+
+#searchButton {
+	margin-left: 10px;
+	border-radius: 10px;
+}
