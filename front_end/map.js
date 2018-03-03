@@ -45,8 +45,6 @@ map.data.setStyle(function(feature) {
     return {
         icon: getCircle(magnitude)
     };
-<<<<<<< HEAD
-    */
 
 
 
@@ -69,9 +67,7 @@ map.data.setStyle(function(feature) {
             icon: getCircle(magnitude)
         };
     });
-=======
 });
->>>>>>> origin/master
 
 window.addEventListener("touchstart", touchHandler, false);
 }
@@ -92,7 +88,7 @@ function eqfeed_callback(results) {
 }
 
 function geocodeAddress(geocoder, resultsMap) {
-   
+
     var address = document.getElementById('locationInput').value;
 
     geocoder.geocode({'address': address}, function(results, status) {
