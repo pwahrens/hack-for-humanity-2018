@@ -26,6 +26,8 @@ function initMap() {
             icon: getCircle(magnitude)
         };
     });
+
+    window.addEventListener("touchstart", touchHandler, false);
 }
 
 function getCircle(magnitude) {
@@ -51,10 +53,8 @@ function geocodeAddress(geocoder, resultsMap) {
     geocoder.geocode({'address': address}, function(results, status) {
         if (status === 'OK') {
             resultsMap.setCenter(results[0].geometry.location);
-            var marker = new google.maps.Marker({
-                map: resultsMap,
-                position: results[0].geometry.location
-            });
+            resultsMap.setZoom(10);
+
         } else {
             alert('Geocode was not successful for the following reason: ' + status);
         }
@@ -85,4 +85,12 @@ function createMarker(position, map, title, icon, content) {
 function removeMarker(marker) {
     marker.setMap(null)
     marker = null;
+}
+
+
+// prevent multitouch
+function touchHandler(event){
+    if(event.touches.length > 1){
+         event.preventDefault()
+    }
 }
