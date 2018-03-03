@@ -28,9 +28,10 @@ function initMap() {
 
     // This example uses a local copy of the GeoJSON stored at
     // http://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/2.5_week.geojsonp
-    script.src = 'https://developers.google.com/maps/documentation/javascript/examples/json/earthquake_GeoJSONP.js';
+    script.src = 'data.js';
     document.getElementsByTagName('head')[0].appendChild(script);
 
+    console.log(JSON.stringify(data))
 
     /*
     var australiaImage = {
@@ -41,13 +42,17 @@ function initMap() {
     };
     */
 
-var marker = createMarker(
-    {lat: -25.363, lng: 131.044},
-    map,
-    "Hello, Australia!",
-    null,
-    "This country has Kangaroos"
-)
+    var marker
+    for (var i in data.locations) {
+        var location = data.locations[i]
+        marker = createMarker(
+            {lat: location.position.lat, lng: location.position.lng},
+            location.title,
+            location.icon,
+            location.content
+        )
+    }
+
 
 map.data.setStyle(function(feature) {
     var magnitude = feature.getProperty('mag');
@@ -59,7 +64,6 @@ map.data.setStyle(function(feature) {
 
     var marker = createMarker(
         {lat: -25.363, lng: 131.044},
-        map,
         "Hello, Australia!",
         null,
         "This country has Kangaroos"
@@ -115,7 +119,7 @@ function geocodeAddress(geocoder, resultsMap) {
     });
 }
 
-function createMarker(position, map, title, icon, content) {
+function createMarker(position, title, icon, content) {
     var infowindow = new google.maps.InfoWindow({
         content: content
     })
