@@ -1,6 +1,15 @@
 var map;
 
 function initMap() {
+    document.getElementById('locationInput').addEventListener('keypress', function (e) {
+        var key = e.which || e.keyCode;
+
+        // Check for enter keypress
+        if (key === 13) {
+            geocodeAddress(geocoder, map);
+        }
+    });
+
     map = new google.maps.Map(document.getElementById('map'), {
         zoom: 2,
         center: {lat: -33.865427, lng: 151.196123},
@@ -29,8 +38,8 @@ function initMap() {
     size: new google.maps.Size(32, 32),
     origin: new google.maps.Point(0, 0),
     anchor: new google.maps.Point(0, 32)
-};
-*/
+    };
+    */
 
 var marker = createMarker(
     {lat: -25.363, lng: 131.044},
@@ -56,8 +65,6 @@ map.data.setStyle(function(feature) {
         "This country has Kangaroos"
     )
 
-
-
     var markerCluster = new MarkerClusterer(map, markers,
             {imagePath: 'https://developers.google.com/maps/documentation/javascript/examples/markerclusterer/m'});
 
@@ -69,6 +76,8 @@ map.data.setStyle(function(feature) {
     });
 });
 
+
+// Prevent zooming issues on mobile
 window.addEventListener("touchstart", touchHandler, false);
 }
 
@@ -106,10 +115,6 @@ function geocodeAddress(geocoder, resultsMap) {
     });
 }
 
-function createImage(url, size, origin, anchor) {
-
-}
-
 function createMarker(position, map, title, icon, content) {
     var infowindow = new google.maps.InfoWindow({
         content: content
@@ -135,7 +140,6 @@ function removeMarker(marker) {
     marker.setMap(null)
     marker = null;
 }
-
 
 // prevent multitouch
 function touchHandler(event){
