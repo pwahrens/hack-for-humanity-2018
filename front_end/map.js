@@ -24,29 +24,29 @@ function initMap() {
 
     /*
     var australiaImage = {
-        url: 'https://www.shareicon.net/data/32x32/2016/09/30/837631_animal_512x512.png',
-        size: new google.maps.Size(32, 32),
-        origin: new google.maps.Point(0, 0),
-        anchor: new google.maps.Point(0, 32)
+    url: 'https://www.shareicon.net/data/32x32/2016/09/30/837631_animal_512x512.png',
+    size: new google.maps.Size(32, 32),
+    origin: new google.maps.Point(0, 0),
+    anchor: new google.maps.Point(0, 32)
+};
+*/
+
+var marker = createMarker(
+    {lat: -25.363, lng: 131.044},
+    map,
+    "Hello, Australia!",
+    null,
+    "This country has Kangaroos"
+)
+
+map.data.setStyle(function(feature) {
+    var magnitude = feature.getProperty('mag');
+    return {
+        icon: getCircle(magnitude)
     };
-    */
+});
 
-    var marker = createMarker(
-        {lat: -25.363, lng: 131.044},
-        map,
-        "Hello, Australia!",
-        null,
-        "This country has Kangaroos"
-    )
-
-    map.data.setStyle(function(feature) {
-        var magnitude = feature.getProperty('mag');
-        return {
-            icon: getCircle(magnitude)
-        };
-    });
-
-    window.addEventListener("touchstart", touchHandler, false);
+window.addEventListener("touchstart", touchHandler, false);
 }
 
 function getCircle(magnitude) {
@@ -75,7 +75,11 @@ function geocodeAddress(geocoder, resultsMap) {
             resultsMap.setZoom(10);
 
         } else {
-            alert('Geocode was not successful for the following reason: ' + status);
+            if (status == 'ZERO_RESULTS') {
+                alert('No cities or countries found during query');
+            } else {
+                alert('We could not find the city and/or country for the following reason: ' + status);
+            }
         }
     });
 }
@@ -114,6 +118,6 @@ function removeMarker(marker) {
 // prevent multitouch
 function touchHandler(event){
     if(event.touches.length > 1){
-         event.preventDefault()
+        event.preventDefault()
     }
 }
