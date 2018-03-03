@@ -7,3 +7,7 @@ from twilio.twiml.messaging_response import MessagingResponse
 @csrf_exempt
 def database(request):
     return HttpResponse("Paul")
+
+def main_handle(request):
+    return HttpResponse("Neel")
+
