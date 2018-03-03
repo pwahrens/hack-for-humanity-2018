@@ -1,1 +1,1 @@
-# hack_for_humanity_2018
+# hack-for-humanity-2018
