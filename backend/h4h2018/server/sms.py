@@ -1,10 +1,13 @@
 # Django imports
 from django.http import HttpResponse
 from django.views.decorators.csrf import csrf_exempt
+from twilio.rest import Client
 
 # Twilio imports
 from twilio.twiml.messaging_response import MessagingResponse
-from twilio.rest import Client
+
+# Local imports
+from . import database, parser
 
 # Secret text
 filename = "server\\secrets.txt"
@@ -20,7 +23,7 @@ response = {}
 
 
 @csrf_exempt
-def sms_init(request):
+def sms_init():
     test_numbers = ["+16507663993", "+14259414701", "+13602414028"]
 
     # Send initialization message to each number in array.
@@ -35,7 +38,8 @@ def sms_init(request):
     return HttpResponse("Working.")
 
 
-def sms_response(request):
+@csrf_exempt
+def sms_response():
     # Receive most recent message information
     received_message = client.messages.list()[0].body
     received_sender = client.messages.list()[0].from_
@@ -43,6 +47,7 @@ def sms_response(request):
     # Begin Response
     resp = MessagingResponse()
 
+    msg = ""
     if response.get(received_sender) is None:
         # If not in dictionary, send first response and update dictionary with number and message.
         msg = resp.message("Received. Please send your location (City, State/Province, Country).")
@@ -51,8 +56,20 @@ def sms_response(request):
         # If in response, send second message and update dictionary with location.
         msg = resp.message("Received. We have processed your request")
         response[received_sender][2] = received_message
+        needs_bool = parser.parse_request(response[received_sender][1])
+
+        # Fill database with information.
+        database.database(
+            response[received_sender][0],
+            response[received_sender][1],
+            response[received_sender][2],
+            needs_bool['food'],
+            needs_bool['water'],
+            needs_bool['medicine'],
+            needs_bool['blankets'],
+            needs_bool['toiletries'],
+            needs_bool['power']
+        )
 
     # Return the message to Twilio.
     return HttpResponse(str(msg))
-
-

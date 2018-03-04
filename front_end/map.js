@@ -1,8 +1,10 @@
 var map;
 var geocoder;
-var markers = []
+
+
 
 function initMap() {
+      apiCall();
     document.getElementById('locationInput').addEventListener('keypress', function (e) {
         var key = e.which || e.keyCode;
 
@@ -13,7 +15,7 @@ function initMap() {
     });
 
     map = new google.maps.Map(document.getElementById('map'), {
-        zoom: 3,
+        zoom: 4,
         center: {lat:  37.0902, lng: -95.7129},
 
         mapTypeId: 'terrain'
@@ -33,7 +35,7 @@ function initMap() {
     script.src = 'data.js';
     document.getElementsByTagName('head')[0].appendChild(script);
 
-
+    var markers = []
     var marker
     for (var i in data.locations) {
         var location = data.locations[i]
@@ -45,25 +47,23 @@ function initMap() {
             location.content
         )
 
-
+        if (marker != null) {
+            markers.push(marker)
+       }
     }
 
+    var markerCluster = new MarkerClusterer(map, markers,
+              {imagePath: 'https://developers.google.com/maps/documentation/javascript/examples/markerclusterer/m'});
 
       map.data.setStyle(function(feature) {
           var magnitude = feature.getProperty('mag');
 
             return {
-              icon: getCircle(magnitude)
-          };
-
+                 icon: getCircle(magnitude)
+            };
       });
 
-      var markerCluster = new MarkerClusterer(map, markers,
-                {imagePath: 'https://developers.google.com/maps/documentation/javascript/examples/markerclusterer/m'});
-
-
-      // Prevent zooming issues on mobile
-      window.addEventListener("touchstart", touchHandler, false);
+      console.log(markers);
 }
 
 function getCircle(magnitude) {
@@ -115,26 +115,24 @@ function createMarker(address, title, icon, content) {
     var infowindow = new google.maps.InfoWindow({
            content: contentString
     });
+    var marker = new google.maps.Marker()
 
     geocoder.geocode({'address': address}, function(results, status) {
         var position = results[0].geometry.location
 
-        var marker = new google.maps.Marker({
-            position: position,
-            map: map,
-            title: title,
-            icon: icon
-        })
+        marker.setPosition(position)
+        marker.setTitle(title)
+        marker.setIcon(icon)
+        marker.setMap(map)
+        // marker.setAnimation(google.maps.Animation.DROP)
 
         marker.addListener('click', function() {
             infowindow.open(map, marker)
         })
 
-        marker.setMap(map)
-        markers.push(marker)
+       })
 
-        return marker
-    })
+    return marker
 }
 
 function removeMarker(marker) {
@@ -147,4 +145,29 @@ function touchHandler(event){
     if(event.touches.length > 1){
         event.preventDefault()
     }
+}
+
+// api
+function httpGetAsync(theUrl, callback)
+{
+    var xmlHttp = new XMLHttpRequest();
+    xmlHttp.onreadystatechange = function() {
+        if (xmlHttp.readyState == 4 && xmlHttp.status == 200)
+            callback(xmlHttp.responseText);
+    }
+
+    xmlHttp.open("GET", theUrl, true); // true for asynchronous
+    //xmlHttp.setRequestHeader('Access-Control-Allow-Origin', '*');
+    xmlHttp.send(null);
+}
+
+function apiCall() {
+      var url = "http://0c03c9c8.ngrok.io"
+      httpGetAsync(url + "/server/main/", function(response){
+            var json = JSON.parse(response)
+            for (var i in json.data) {
+                  createMarker(json.data[i].location, "", null, json.data[i].text)
+
+              }
+      })
 }
