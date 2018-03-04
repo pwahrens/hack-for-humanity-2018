@@ -23,7 +23,7 @@ response = {}
 
 @csrf_exempt
 def sms_init(request):
-    test_numbers = ["+16507663993", "+14259414701", "+13602414028"]
+    test_numbers = ["+14086749434"]#, "+16507663993", "+14259414701", "+13602414028"]
 
     # Send initialization message to each number in array.
     for number in test_numbers:
