@@ -197,7 +197,7 @@ function createMarker(address, title, icon, content, number) {
         })
 
     })
-    
+
     markers.push(marker)
 
     return marker
@@ -270,8 +270,8 @@ function apiCall() {
         });
 
         markerClusterer = new MarkerClusterer(map, markers,
-            {imagePath: 'https://googlemaps.github.io/js-marker-clusterer/images/m',
-            gridSize: 10,
-            minimumClusterSize: 1});
-        })
-    }
+           {imagePath: 'https://googlemaps.github.io/js-marker-clusterer/images/m',
+           gridSize: 10,
+           minimumClusterSize: 2});
+    })
+}
