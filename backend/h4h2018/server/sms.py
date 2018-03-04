@@ -6,6 +6,8 @@ from django.views.decorators.csrf import csrf_exempt
 from twilio.twiml.messaging_response import MessagingResponse
 from twilio.rest import Client
 
+from . import database
+
 # Secret text
 filename = "server\\secrets.txt"
 file = open(filename, "r")
@@ -34,7 +36,7 @@ def sms_init(request):
     # Return the message to Twilio.
     return HttpResponse("Working.")
 
-
+@csrf_exempt
 def sms_response(request):
     # Receive most recent message information
     received_message = client.messages.list()[0].body
@@ -51,6 +53,11 @@ def sms_response(request):
         # If in response, send second message and update dictionary with location.
         msg = resp.message("Received. We have processed your request")
         response[received_sender][2] = received_message
+        database.database(
+            response[received_sender][0],
+            response[received_sender][1],
+            response[received_sender][2]
+        )
 
     # Return the message to Twilio.
     return HttpResponse(str(msg))

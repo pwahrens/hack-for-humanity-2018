@@ -1,13 +1,21 @@
-from django.shortcuts import render
+# Django imports
 from django.http import HttpResponse
 from django.views.decorators.csrf import csrf_exempt
+from . import models
 
-from twilio.twiml.messaging_response import MessagingResponse
 
 @csrf_exempt
-def database(request):
-    return HttpResponse("Paul")
+def database(phone_number, text, location):
+    b = models.Message(phone_number=phone_number, text=text, location=location)
+    b.save()
+
+
+    for msg in list(models.Message.objects.all()):
+        print(msg)
+
+    return HttpResponse("Working")
+
 
 def main_handle(request):
-    return HttpResponse("Neel")
+    return HttpResponse(models.Message.objects.all())
 
