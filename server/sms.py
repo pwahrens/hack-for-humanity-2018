@@ -9,12 +9,8 @@ from twilio.twiml.messaging_response import MessagingResponse
 # Local imports
 from . import database, parser
 
-# Secret text
-filename = "server\\secrets.txt"
-file = open(filename, "r")
-
 # Set up client authentication
-auth_token = file.read()
+auth_token = "017f997a8d275e1f81512d505651b5ea"
 account_sid = "ACcf932ad8df8fdbd9e55f78891ca78000"
 client = Client(account_sid, auth_token)
 
