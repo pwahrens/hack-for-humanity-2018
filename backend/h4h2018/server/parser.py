@@ -5,7 +5,7 @@ import string
 def parse_request(request):
     # All possible requests.
     requests = {
-        'food': ('food', 'calories', 'hungry', 'meal',),
+        'food': ('food', 'calorie', 'hungry', 'meal','snack'),
         'water': ('water', 'hydration', 'hydrate', 'thirst'),
         'medicine': ('meds', 'medicine', 'drugs', 'insulin', 'disease', 'pain', 'sick'),
         'blankets': ('warm', 'blanket', 'cold'),

@@ -5,7 +5,7 @@ from . import models
 
 
 @csrf_exempt
-def database(phone_number, text, location, food, water, medicine, blankets, toiletries, power):
+def fill_database(phone_number, text, location, food, water, medicine, blankets, toiletries, power):
     b = models.Message(phone_number=phone_number, text=text, location=location, food=food, water=water,
                        medicine=medicine, blankets=blankets, toiletries=toiletries, power=power)
     b.save()

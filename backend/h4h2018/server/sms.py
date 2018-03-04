@@ -23,7 +23,7 @@ response = {}
 
 
 @csrf_exempt
-def sms_init():
+def sms_init(request):
     test_numbers = ["+16507663993", "+14259414701", "+13602414028"]
 
     # Send initialization message to each number in array.
@@ -39,7 +39,7 @@ def sms_init():
 
 
 @csrf_exempt
-def sms_response():
+def sms_response(request):
     # Receive most recent message information
     received_message = client.messages.list()[0].body
     received_sender = client.messages.list()[0].from_
@@ -59,7 +59,7 @@ def sms_response():
         needs_bool = parser.parse_request(response[received_sender][1])
 
         # Fill database with information.
-        database.database(
+        database.fill_database(
             response[received_sender][0],
             response[received_sender][1],
             response[received_sender][2],
