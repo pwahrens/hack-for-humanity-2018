@@ -5,7 +5,7 @@ from . import models
 
 
 @csrf_exempt
-def fill_database(inputDict):
+def fill_database(**inputDict):
     b = models.Message(**inputDict)
     b.save()
     all_messages = list(models.Message.objects.all())
@@ -13,7 +13,6 @@ def fill_database(inputDict):
         print(msg)
 
     return HttpResponse("Working")
-
 
 
 def main_handle(request):

@@ -12,9 +12,66 @@ resources['Blankets'] = 0
 resources['Toiletries'] = 0
 resources['Power'] = 0
 
+// Highcharts for the resource graph
+var chart = Highcharts.chart('resource-graph', {
+    chart: {
+        type: 'column'
+    },
+    title: {
+        text: 'Needed Resources'
+    },
+    xAxis: {
+        type: 'category'
+    },
+    yAxis: {
+        min: 0,
+        title: {
+            text: 'Quantity'
+        }
+    },
+    legend: {
+        enabled: false
+    },
+    plotOptions: {
+        column: {
+            pointPadding: 0.2,
+            borderWidth: 0
+        }
+    },
+    series: [{
+        name: 'Quantity',
+        colorByPoint: true,
+        data: [{
+            name: 'Food',
+            y: resources['Food'],
+            color: '#4CAF50'
+        }, {
+            name: 'Water',
+            y: resources['Water'],
+            color: '#2196F3'
+        }, {
+            name: 'Medicine',
+            y: resources['Medicine'],
+            color: '#F44336'
+        }, {
+            name: 'Blankets',
+            y: resources['Blankets'],
+            color: '#FF9800'
+        }, {
+            name: 'Toiletries',
+            y: resources['Toiletries'],
+            color: '#9C27B0'
+        }, {
+            name: 'Power',
+            y: resources['Power'],
+            color: '#FFEB3B'
+        }]
+    }]
+});
 
 function initMap() {
     apiCall();
+
     document.getElementById('locationInput').addEventListener('keypress', function (e) {
         var key = e.which || e.keyCode;
 
@@ -29,20 +86,20 @@ function initMap() {
         mapTypeId: 'terrain',
         center: new google.maps.LatLng(37.0902, -95.7129),
         mapTypeControl: true,
-          mapTypeControlOptions: {
-              style: google.maps.MapTypeControlStyle.HORIZONTAL_BAR,
-              position: google.maps.ControlPosition.TOP_CENTER
-          },
-          zoomControl: true,
-          zoomControlOptions: {
-              position: google.maps.ControlPosition.LEFT_CENTER
-          },
-          scaleControl: true,
-          streetViewControl: true,
-          streetViewControlOptions: {
-              position: google.maps.ControlPosition.LEFT_TOP
-          },
-          fullscreenControl: false
+        mapTypeControlOptions: {
+            style: google.maps.MapTypeControlStyle.HORIZONTAL_BAR,
+            position: google.maps.ControlPosition.TOP_CENTER
+        },
+        zoomControl: true,
+        zoomControlOptions: {
+            position: google.maps.ControlPosition.LEFT_CENTER
+        },
+        scaleControl: true,
+        streetViewControl: true,
+        streetViewControlOptions: {
+            position: google.maps.ControlPosition.LEFT_TOP
+        },
+        fullscreenControl: false
     });
 
     geocoder = new google.maps.Geocoder();
@@ -51,166 +108,164 @@ function initMap() {
         geocodeAddress(geocoder, map);
     });
 
-
-
-    }
-
-
-    function getCircle(magnitude) {
+    map.data.setStyle(function(feature) {
+        var magnitude = feature.getProperty('mag');
         return {
-            path: google.maps.SymbolPath.CIRCLE,
-            fillColor: 'red',
-            fillOpacity: .2,
-            scale: Math.pow(2, magnitude) / 2,
-            strokeColor: 'white',
-            strokeWeight: .5
+            icon: getCircle(magnitude)
         };
-    }
+    });
 
-    function eqfeed_callback(results) {
-        map.data.addGeoJson(results);
-    }
+}
 
-    function geocodeAddress(geocoder, resultsMap) {
+function getCircle(magnitude) {
+    return {
+        path: google.maps.SymbolPath.CIRCLE,
+        fillColor: 'red',
+        fillOpacity: .2,
+        scale: Math.pow(2, magnitude) / 2,
+        strokeColor: 'white',
+        strokeWeight: .5
+    };
+}
 
-        var address = document.getElementById('locationInput').value;
+function eqfeed_callback(results) {
+    map.data.addGeoJson(results);
+}
 
-        geocoder.geocode({'address': address}, function(results, status) {
-            if (status === 'OK') {
-                resultsMap.setCenter(results[0].geometry.location);
 
-                resultsMap.fitBounds(results[0].geometry.viewport);
+
+function geocodeAddress(geocoder, resultsMap) {
+
+    var address = document.getElementById('locationInput').value;
+
+    geocoder.geocode({'address': address}, function(results, status) {
+        if (status === 'OK') {
+            resultsMap.setCenter(results[0].geometry.location);
+
+            resultsMap.fitBounds(results[0].geometry.viewport);
+        } else {
+            if (status == 'ZERO_RESULTS') {
+                alert('No cities or countries found during query');
             } else {
-                if (status == 'ZERO_RESULTS') {
-                    alert('No cities or countries found during query');
-                } else {
-                    alert('We could not find the city and/or country for the following reason: ' + status);
-                }
+                alert('We could not find the city and/or country for the following reason: ' + status);
             }
         }
-    );
+    }
+);
 }
 
 function createMarker(address, title, icon, content, number) {
 
-      var contentString = '<!----' + 'Hello' + '---->' +
-      '<div id="content">'+
-      '<div id="siteNotice">'+
-            '</div>'+
-                  '<h2 id="firstHeading" class="firstHeading">'+title+'</h2>'+
-                  '<h3>'+content+'</h3>' +
-                  '<div id="bodyContent">'+
-                        '<p id="secondHeading" class="firstHeading">'+number+'</p>'+
-                  '</div>'
+    var contentString = '<!----' + 'Hello' + '---->' +
+    '<div id="content">'+
+    '<div id="siteNotice">'+
+    '</div>'+
+    '<h2 id="firstHeading" class="firstHeading">'+title+'</h2>'+
+    '<h3>'+content+'</h3>' +
+    '<div id="bodyContent">'+
+    '<p id="secondHeading" class="firstHeading">'+number+'</p>'+
+    '</div>'
 
-            '</div>'+
-      '</div>';
+    '</div>'+
+    '</div>';
 
 
     var infowindow = new google.maps.InfoWindow({
-           content: contentString
+        content: contentString
     });
 
     var marker = new google.maps.Marker()
-        geocoder.geocode({'address': address}, function(results, status) {
-            if (results === null) {
-                return;
-            }
-
+    geocoder.geocode({'address': address}, function(results, status) {
+        if (results === null) {
+            return;
+        }
 
         marker.setPosition(results[0].geometry.location)
         marker.setTitle(title)
         marker.setIcon(icon)
         marker.setMap(map)
-        // marker.setAnimation(google.maps.Animation.DROP)
+        marker.setAnimation(google.maps.Animation.DROP)
 
-            marker.addListener('click', function() {
-                infowindow.open(map, marker)
-            })
-
+        marker.addListener('click', function() {
+            infowindow.open(map, marker)
         })
 
-        markers.push(marker)
+    })
 
-        return marker
-    }
+    markers.push(marker)
 
-    function removeMarker(marker) {
-        marker.setMap(null)
-        marker = null;
-    }
+    return marker
+}
 
-    // prevent multitouch
-    function touchHandler(event){
-        if(event.touches.length > 1){
-            event.preventDefault()
-        }
-    }
+function removeMarker(marker) {
+    marker.setMap(null)
+    marker = null;
+}
 
     // api
-    function httpGetAsync(theUrl, callback)
-    {
+    function httpGetAsync(theUrl, callback) {
         var xmlHttp = new XMLHttpRequest();
         xmlHttp.onreadystatechange = function() {
             if (xmlHttp.readyState == 4 && xmlHttp.status == 200) {
                   callback(xmlHttp.responseText);
             }
         }
+ }
 
-        xmlHttp.open("GET", theUrl, true); // true for asynchronous
-        xmlHttp.send(null);
+// api
+function httpGetAsync(theUrl, callback)
+{
+    var xmlHttp = new XMLHttpRequest();
+    xmlHttp.onreadystatechange = function() {
+        if (xmlHttp.readyState == 4 && xmlHttp.status == 200)
+        callback(xmlHttp.responseText);
     }
 
-    function apiCall() {
-        var url = "http://7ecab5ef.ngrok.io"
-        httpGetAsync(url + "/server/main/", function(response){
-            var json = JSON.parse(response)
-            console.log(json);
-            for (var i in json.data) {
+    xmlHttp.open("GET", theUrl, true); // true for asynchronous
+    xmlHttp.send(null);
+}
 
-                createMarker(json.data[i].location, "", null, json.data[i].text, json.data[i].phone_number)
-                if (json.data[i].food) {
-                    ++resources['Food']
-                }
-                if (json.data[i].water) {
-                    ++resources['Water']
-                }
-                if (json.data[i].medicine) {
-                    ++resources['Medicine']
-                }
-                if (json.data[i].blankets) {
-                    ++resources['Blankets']
-                }
-                if (json.data[i].toiletries) {
-                    ++resources['Toiletries']
-                }
-                if (json.data[i].power) {
-                    ++resources['Power']
-                }
+function apiCall() {
+    var url = "http://7ecab5ef.ngrok.io"
+    httpGetAsync(url + "/server/main/", function(response){
+        var json = JSON.parse(response)
+        for (var i in json.data) {
+            createMarker(json.data[i].location, "", null, json.data[i].text, json.data[i].phone_number)
+            if (json.data[i].food) {
+                ++resources['Food']
             }
-            markerClusterer = new MarkerClusterer(map, markers,
-                {imagePath: 'https://googlemaps.github.io/js-marker-clusterer/images/m',
-                gridSize: 10,
-                minimumClusterSize: 1});
-        })
-    }
+            if (json.data[i].water) {
+                ++resources['Water']
+            }
+            if (json.data[i].medicine) {
+                ++resources['Medicine']
+            }
+            if (json.data[i].blankets) {
+                ++resources['Blankets']
+            }
+            if (json.data[i].toiletries) {
+                ++resources['Toiletries']
+            }
+            if (json.data[i].power) {
+                ++resources['Power']
+            }
+        }
+        chart.update({
+            series: [{
+                data: [
+                    resources['Food'],
+                    resources['Water'],
+                    resources['Medicine'],
+                    resources['Blankets'],
+                    resources['Toiletries'],
+                    resources['Power']
+                ]
+            }]
+        });
 
-
-    // ajax
-    //
-    // var previous = null;
-    //     var current = null;
-    //     setInterval(function() {
-    //          var url = "http://7ecab5ef.ngrok.io"
-    //          httpGetAsync(url + "/server/main/", function(response) {
-    //                current = JSON.stringify(JSON.parse(response));
-    //                if (previous && current && previous !== current) {
-    //                    console.log('refresh');
-    //                    for (var i in markers) {
-    //                          removeMarker(markers[i]);
-    //                          apiCall();
-    //                    }
-    //                }
-    //                previous = current;
-    //          });
-    //   }, 20000000);
+        markerClusterer = new MarkerClusterer(map, markers,
+           {imagePath: 'https://googlemaps.github.io/js-marker-clusterer/images/m',
+           gridSize: 10,
+           minimumClusterSize: 1});
+    })
+}

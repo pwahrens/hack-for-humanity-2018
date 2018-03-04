@@ -63,7 +63,7 @@ def sms_response(request):
             phone_number =response[received_sender][0],
             text =response[received_sender][1],
             location =response[received_sender][2],
-            **needsbool
+            **needs_bool
         )
 
     # Return the message to Twilio.
