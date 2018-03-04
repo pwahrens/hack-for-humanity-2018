@@ -29,7 +29,7 @@ DEBUG = True
 ALLOWED_HOSTS = [
     '.ngrok.io',
     'localhost',
-    'https://pacific-refuge-33589.herokuapp.com'
+    'pacific-refuge-33589.herokuapp.com'
 ]
 
 
