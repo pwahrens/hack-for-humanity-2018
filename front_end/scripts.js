@@ -108,25 +108,6 @@ function initMap() {
         geocodeAddress(geocoder, map);
     });
 
-<<<<<<< HEAD
-    /*
-
-    var checkboxes = document.getElementsByClassName('resource-checkbox')
-
-    for (var i = 0; i < checkboxes.length; ++i) {
-        checkboxes[i].addEventListener('click', function() {
-            console.log("HELLO")
-        });
-    }
-
-    */
-
-    var markerCluster = new MarkerClusterer(map, markers,
-        {imagePath: 'https://developers.google.com/maps/documentation/javascript/examples/markerclusterer/m'}
-    );
-
-=======
->>>>>>> d204619971fcda67f7aeca6845af306968fd13b7
     map.data.setStyle(function(feature) {
         var magnitude = feature.getProperty('mag');
         return {
