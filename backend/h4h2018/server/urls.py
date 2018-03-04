@@ -10,5 +10,5 @@ urlpatterns = [
     url(r'^database/', database.fill_database, name='database'),
     url(r'^main/', database.main_handle, name='main page'),
     url(r'^fill/', fake_database.generate_entries, name='fill'),
-    url(r'^index/', display.index, name='index')
+    url(r'^index/', display.index, name='index'),
 ]
