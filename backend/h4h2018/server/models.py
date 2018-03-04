@@ -1,3 +1,4 @@
+# Django imports
 from django.db import models
 
 
@@ -8,6 +9,9 @@ class Message(models.Model):
     food = models.BooleanField()
     water = models.BooleanField()
     medicine = models.BooleanField()
+    blankets = models.BooleanField()
+    toiletries = models.BooleanField()
+    power = models.BooleanField()
 
     def __str__(self):
         return "(" + self.phone_number + ", " + self.text + ", " + self.location + ")\n"

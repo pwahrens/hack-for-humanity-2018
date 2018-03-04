@@ -1,13 +1,16 @@
+# Python imports
 import string
 
-def parserequest(request):
-    requests= {
-        'food':('food','calories','hungry','meal',),
-        'water':('water','hydration','hydrate','thirst'),
-        'medicine':('meds','medicine','drugs','insulin','disease','pain'),
-        'blanket':('warm','blanket','cold'),
-        'toiletries': ('toilet','sanitation','sanitary','clean','dirty'),
-        'power':('power','electricity','battery','batteries','energy','solar','generator','gas'),
+
+def parse_request(request):
+    # All possible requests.
+    requests = {
+        'food': ('food', 'calories', 'hungry', 'meal',),
+        'water': ('water', 'hydration', 'hydrate', 'thirst'),
+        'medicine': ('meds', 'medicine', 'drugs', 'insulin', 'disease', 'pain', 'sick'),
+        'blankets': ('warm', 'blanket', 'cold'),
+        'toiletries': ('toilet', 'sanitation', 'sanitary', 'clean', 'dirty'),
+        'power': ('power', 'electricity', 'battery', 'batteries', 'energy', 'solar', 'generator', 'gas'),
         }
     out = {}
     request = request.translate((None, string.punctuation))
