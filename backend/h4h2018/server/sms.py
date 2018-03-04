@@ -60,15 +60,10 @@ def sms_response(request):
 
         # Fill database with information.
         database.fill_database(
-            response[received_sender][0],
-            response[received_sender][1],
-            response[received_sender][2],
-            needs_bool['food'],
-            needs_bool['water'],
-            needs_bool['medicine'],
-            needs_bool['blankets'],
-            needs_bool['toiletries'],
-            needs_bool['power']
+            phone_number =response[received_sender][0],
+            text =response[received_sender][1],
+            location =response[received_sender][2],
+            **needsbool
         )
 
     # Return the message to Twilio.
