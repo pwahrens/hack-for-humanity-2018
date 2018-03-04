@@ -1,5 +1,6 @@
 import random
 from . import parser,database
+from django.http import HttpResponse
 def random_phone_number():
     n = '0000000000'
     while '9' in n[3:6] or n[3:6]=='000' or n[6]==n[7]==n[8]==n[9]:
@@ -20,8 +21,8 @@ def random_needs():
         out +=  " " + random.choice(parser.requests[random.choice(parser.requests.keys())])
     return out
 
-def generate_entries(count):
-    for i in range(count):
+def generate_entries(request):
+    for i in range(100):
         num = random_phone_number()
         loc = random_location()
         text = random_needs()
@@ -32,3 +33,5 @@ def generate_entries(count):
             location =loc,
             **needs
         )
+
+    return HttpResponse("Working.")
