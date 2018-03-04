@@ -1,7 +1,10 @@
+//file:///Users/MasonBruce/Desktop/hack-for-humanity-2018/front_end/map.html
 var map;
 var geocoder;
 var markers = []
 var resources = {}
+var markerClusterer
+
 resources['Food'] = 0
 resources['Water'] = 0
 resources['Medicine'] = 0
@@ -105,6 +108,7 @@ function initMap() {
         geocodeAddress(geocoder, map);
     });
 
+<<<<<<< HEAD
     /*
 
     var checkboxes = document.getElementsByClassName('resource-checkbox')
@@ -121,9 +125,10 @@ function initMap() {
         {imagePath: 'https://developers.google.com/maps/documentation/javascript/examples/markerclusterer/m'}
     );
 
+=======
+>>>>>>> d204619971fcda67f7aeca6845af306968fd13b7
     map.data.setStyle(function(feature) {
         var magnitude = feature.getProperty('mag');
-
         return {
             icon: getCircle(magnitude)
         };
@@ -216,12 +221,15 @@ function removeMarker(marker) {
     marker = null;
 }
 
-// prevent multitouch
-function touchHandler(event){
-    if(event.touches.length > 1){
-        event.preventDefault()
-    }
-}
+    // api
+    function httpGetAsync(theUrl, callback) {
+        var xmlHttp = new XMLHttpRequest();
+        xmlHttp.onreadystatechange = function() {
+            if (xmlHttp.readyState == 4 && xmlHttp.status == 200) {
+                  callback(xmlHttp.responseText);
+            }
+        }
+ }
 
 // api
 function httpGetAsync(theUrl, callback)
@@ -237,7 +245,7 @@ function httpGetAsync(theUrl, callback)
 }
 
 function apiCall() {
-    var url = "http://0c03c9c8.ngrok.io"
+    var url = "http://7ecab5ef.ngrok.io"
     httpGetAsync(url + "/server/main/", function(response){
         var json = JSON.parse(response)
         for (var i in json.data) {
@@ -273,5 +281,10 @@ function apiCall() {
                 ]
             }]
         });
+
+        markerClusterer = new MarkerClusterer(map, markers,
+           {imagePath: 'https://googlemaps.github.io/js-marker-clusterer/images/m',
+           gridSize: 10,
+           minimumClusterSize: 1});
     })
 }
