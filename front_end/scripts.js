@@ -98,7 +98,7 @@ function initMap() {
         },
         fullscreenControl: false
     });
-
+    
     geocoder = new google.maps.Geocoder();
 
     document.getElementById('searchButton').addEventListener('click', function() {
@@ -106,53 +106,54 @@ function initMap() {
     });
 
     var markerCluster = new MarkerClusterer(map, markers,
-        {imagePath: 'https://developers.google.com/maps/documentation/javascript/examples/markerclusterer/m'});
+        {imagePath: 'https://developers.google.com/maps/documentation/javascript/examples/markerclusterer/m'}
+    );
 
-        map.data.setStyle(function(feature) {
-            var magnitude = feature.getProperty('mag');
+    map.data.setStyle(function(feature) {
+        var magnitude = feature.getProperty('mag');
 
-            return {
-                icon: getCircle(magnitude)
-            };
-        });
-
-    }
-
-    function getCircle(magnitude) {
         return {
-            path: google.maps.SymbolPath.CIRCLE,
-            fillColor: 'red',
-            fillOpacity: .2,
-            scale: Math.pow(2, magnitude) / 2,
-            strokeColor: 'white',
-            strokeWeight: .5
+            icon: getCircle(magnitude)
         };
-    }
+    });
 
-    function eqfeed_callback(results) {
-        map.data.addGeoJson(results);
-    }
+}
+
+function getCircle(magnitude) {
+    return {
+        path: google.maps.SymbolPath.CIRCLE,
+        fillColor: 'red',
+        fillOpacity: .2,
+        scale: Math.pow(2, magnitude) / 2,
+        strokeColor: 'white',
+        strokeWeight: .5
+    };
+}
+
+function eqfeed_callback(results) {
+    map.data.addGeoJson(results);
+}
 
 
 
-    function geocodeAddress(geocoder, resultsMap) {
+function geocodeAddress(geocoder, resultsMap) {
 
-        var address = document.getElementById('locationInput').value;
+    var address = document.getElementById('locationInput').value;
 
-        geocoder.geocode({'address': address}, function(results, status) {
-            if (status === 'OK') {
-                resultsMap.setCenter(results[0].geometry.location);
+    geocoder.geocode({'address': address}, function(results, status) {
+        if (status === 'OK') {
+            resultsMap.setCenter(results[0].geometry.location);
 
-                resultsMap.fitBounds(results[0].geometry.viewport);
+            resultsMap.fitBounds(results[0].geometry.viewport);
+        } else {
+            if (status == 'ZERO_RESULTS') {
+                alert('No cities or countries found during query');
             } else {
-                if (status == 'ZERO_RESULTS') {
-                    alert('No cities or countries found during query');
-                } else {
-                    alert('We could not find the city and/or country for the following reason: ' + status);
-                }
+                alert('We could not find the city and/or country for the following reason: ' + status);
             }
         }
-    );
+    }
+);
 }
 
 function createMarker(address, title, icon, content, number) {
