@@ -29,56 +29,36 @@ function initMap() {
     script.src = 'data.js';
     document.getElementsByTagName('head')[0].appendChild(script);
 
-    /*
-    var australiaImage = {
-    url: 'https://www.shareicon.net/data/32x32/2016/09/30/837631_animal_512x512.png',
-    size: new google.maps.Size(32, 32),
-    origin: new google.maps.Point(0, 0),
-    anchor: new google.maps.Point(0, 32)
-    };
-    */
-
+    var markers = []
     var marker
     for (var i in data.locations) {
         var location = data.locations[i]
+
         marker = createMarker(
             {lat: location.position.lat, lng: location.position.lng},
             location.title,
             location.icon,
             location.content
         )
+        markers.push(marker)
     }
 
 
-map.data.setStyle(function(feature) {
-    var magnitude = feature.getProperty('mag');
-    return {
-        icon: getCircle(magnitude)
-    };
+      map.data.setStyle(function(feature) {
+          var magnitude = feature.getProperty('mag');
+
+            return {
+              icon: getCircle(magnitude)
+          };
+
+      });
+
+      var markerCluster = new MarkerClusterer(map, markers,
+                {imagePath: 'https://developers.google.com/maps/documentation/javascript/examples/markerclusterer/m'});
 
 
-
-    var marker = createMarker(
-        {lat: -25.363, lng: 131.044},
-        "Hello, Australia!",
-        null,
-        "This country has Kangaroos"
-    )
-
-    var markerCluster = new MarkerClusterer(map, markers,
-            {imagePath: 'https://developers.google.com/maps/documentation/javascript/examples/markerclusterer/m'});
-
-    map.data.setStyle(function(feature) {
-        var magnitude = feature.getProperty('mag');
-        return {
-            icon: getCircle(magnitude)
-        };
-    });
-});
-
-
-// Prevent zooming issues on mobile
-window.addEventListener("touchstart", touchHandler, false);
+      // Prevent zooming issues on mobile
+      window.addEventListener("touchstart", touchHandler, false);
 }
 
 function getCircle(magnitude) {
