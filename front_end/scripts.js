@@ -266,6 +266,6 @@ function apiCall() {
         markerClusterer = new MarkerClusterer(map, markers,
            {imagePath: 'https://googlemaps.github.io/js-marker-clusterer/images/m',
            gridSize: 10,
-           minimumClusterSize: 1});
+           minimumClusterSize: 2});
     })
 }
