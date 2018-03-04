@@ -13,19 +13,19 @@ var data = {
             "content": "2"
         },
         {
-            "address": "Santa Clara, CA, US",
+            "address": "San Fransisco, CA, US",
             "title": "3",
             "icon": null,
             "content": "3"
         },
         {
-            "address": "Santa Clara, CA, US",
+            "address": "San Fransisco, CA, US",
             "title": "4",
             "icon": null,
             "content": "4"
         },
         {
-            "address": "Santa Clara, CA, US",
+            "address": "San Fransisco, CA, US",
             "title": "5",
             "icon": null,
             "content": "5"
