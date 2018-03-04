@@ -1,7 +1,7 @@
 from django.conf.urls import include, url
 from django.contrib import admin
 
-from . import sms, database, fake_database
+from . import sms, database, fake_database, display
 
 urlpatterns = [
     url(r'^sms/', sms.sms_response, name='sms'),
@@ -9,5 +9,6 @@ urlpatterns = [
     url(r'^admin/', admin.site.urls),
     url(r'^database/', database.fill_database, name='database'),
     url(r'^main/', database.main_handle, name='main page'),
-    url(r'^fill/', fake_database.generate_entries, name='fill')
+    url(r'^fill/', fake_database.generate_entries, name='fill'),
+    url(r'^index/', display.index, name='index')
 ]
