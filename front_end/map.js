@@ -12,8 +12,9 @@ function initMap() {
     });
 
     map = new google.maps.Map(document.getElementById('map'), {
-        zoom: 2,
-        center: {lat: -33.865427, lng: 151.196123},
+        zoom: 3,
+        center: {lat:  37.0902, lng: -95.7129},
+
         mapTypeId: 'terrain'
     });
 
@@ -26,6 +27,8 @@ function initMap() {
         geocodeAddress(geocoder, map);
     });
 
+    // This example uses a local copy of the GeoJSON stored at
+    // http://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/2.5_week.geojsonp
     script.src = 'data.js';
     document.getElementsByTagName('head')[0].appendChild(script);
 
@@ -40,6 +43,7 @@ function initMap() {
             location.icon,
             location.content
         )
+
         markers.push(marker)
     }
 
@@ -93,12 +97,28 @@ function geocodeAddress(geocoder, resultsMap) {
             }
         }
     });
+    return resultsMap.center
 }
 
+<<<<<<< HEAD
 function createMarker(address, title, icon, content) {
+=======
+function createMarker(position, title, icon, content) {
+
+      var contentString = '<div id="content">'+
+      '<div id="siteNotice">'+
+            '</div>'+
+                  '<h2 id="firstHeading" class="firstHeading">'+title+'</h2>'+
+                  '<h2 id="firstHeading" class="firstHeading">'+''+'</h2>'+
+                  '<div id="bodyContent">'+
+                  '<p>'+content+'</p>'
+            '</div>'+
+      '</div>';
+
+>>>>>>> d232ce2b39efacacbe3e1354767be472823ae518
     var infowindow = new google.maps.InfoWindow({
-        content: content
-    })
+           content: contentString
+    });
 
     var position
 
@@ -117,6 +137,7 @@ function createMarker(address, title, icon, content) {
         title: title,
         icon: icon
     })
+
 
     marker.addListener('click', function() {
         infowindow.open(map, marker)

@@ -3,3 +3,5 @@
 *.pyc
 backend/h4h2018/server/__pycache__/urls.cpython-36.pyc
 backend/h4h2018/.idea/workspace.xml
+backend/h4h2018/server/secrets
+backend/h4h2018/server/secrets.txt
