@@ -9,9 +9,66 @@ resources['Blankets'] = 0
 resources['Toiletries'] = 0
 resources['Power'] = 0
 
+// Highcharts for the resource graph
+var chart = Highcharts.chart('resource-graph', {
+    chart: {
+        type: 'column'
+    },
+    title: {
+        text: 'Needed Resources'
+    },
+    xAxis: {
+        type: 'category'
+    },
+    yAxis: {
+        min: 0,
+        title: {
+            text: 'Quantity'
+        }
+    },
+    legend: {
+        enabled: false
+    },
+    plotOptions: {
+        column: {
+            pointPadding: 0.2,
+            borderWidth: 0
+        }
+    },
+    series: [{
+        name: 'Quantity',
+        colorByPoint: true,
+        data: [{
+            name: 'Food',
+            y: resources['Food'],
+            color: '#4CAF50'
+        }, {
+            name: 'Water',
+            y: resources['Water'],
+            color: '#2196F3'
+        }, {
+            name: 'Medicine',
+            y: resources['Medicine'],
+            color: '#F44336'
+        }, {
+            name: 'Blankets',
+            y: resources['Blankets'],
+            color: '#FF9800'
+        }, {
+            name: 'Toiletries',
+            y: resources['Toiletries'],
+            color: '#9C27B0'
+        }, {
+            name: 'Power',
+            y: resources['Power'],
+            color: '#FFEB3B'
+        }]
+    }]
+});
 
 function initMap() {
     apiCall();
+
     document.getElementById('locationInput').addEventListener('keypress', function (e) {
         var key = e.which || e.keyCode;
 
@@ -76,6 +133,8 @@ function initMap() {
         map.data.addGeoJson(results);
     }
 
+
+
     function geocodeAddress(geocoder, resultsMap) {
 
         var address = document.getElementById('locationInput').value;
@@ -122,12 +181,11 @@ function createMarker(address, title, icon, content, number) {
             return;
         }
 
-
         marker.setPosition(results[0].geometry.location)
         marker.setTitle(title)
         marker.setIcon(icon)
         marker.setMap(map)
-        // marker.setAnimation(google.maps.Animation.DROP)
+        marker.setAnimation(google.maps.Animation.DROP)
 
         marker.addListener('click', function() {
             infowindow.open(map, marker)
@@ -190,49 +248,17 @@ function apiCall() {
                 ++resources['Power']
             }
         }
+        chart.update({
+            series: [{
+                data: [
+                    resources['Food'],
+                    resources['Water'],
+                    resources['Medicine'],
+                    resources['Blankets'],
+                    resources['Toiletries'],
+                    resources['Power']
+                ]
+            }]
+        });
     })
 }
-
-// Highcharts for the resource graph
-Highcharts.chart('resource-graph', {
-    chart: {
-        type: 'column'
-    },
-    title: {
-        text: 'Needed Resources'
-    },
-    xAxis: {
-        categories: [
-            'Food',
-            'Water',
-            'Medicine',
-            'Blankets',
-            'Toiletries',
-            'Power'
-        ],
-        crosshair: true
-    },
-    yAxis: {
-        min: 0,
-        title: {
-            text: 'Quantity (#)'
-        }
-    },
-    plotOptions: {
-        column: {
-            pointPadding: 0.2,
-            borderWidth: 0
-        }
-    },
-    series: [{
-        name: 'Resources',
-        data: [
-            resources['Food'],
-            resources['Water'],
-            resources['Medicine'],
-            resources['Blankets'],
-            resources['Toiletries'],
-            resources['Power']
-        ]
-    }]
-});
