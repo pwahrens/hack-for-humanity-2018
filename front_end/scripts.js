@@ -4,7 +4,7 @@ var geocoder;
 var markers = []
 var resources = {}
 var markerClusterer
-var types = {}
+
 
 resources['Food'] = 0
 resources['Water'] = 0
@@ -13,12 +13,6 @@ resources['Blankets'] = 0
 resources['Toiletries'] = 0
 resources['Power'] = 0
 
-types['Food'] = []
-types['Water'] = []
-types['Medicine'] = []
-types['Blankets'] = []
-types['Toiletries'] = []
-types['Power'] = []
 
 // Highcharts for the resource graph
 var chart = Highcharts.chart('resource-graph', {
@@ -117,16 +111,10 @@ function initMap() {
     });
 
 
-    document.getElementById('refreshButton').addEventListener('click', refresh());
+    document.getElementById('refreshButton').addEventListener('click', function() {
+          refresh();
+   });
 
-    var checkboxes = document.getElementsByClassName("resource-checkbox")
-
-    for (var i = 0; i < checkboxes.length; ++i) {
-        checkboxes[i].addEventListener('click', function() {
-            toggleResources(this.id)
-
-        })
-    }
 
     map.data.setStyle(function(feature) {
         var magnitude = feature.getProperty('mag');
@@ -146,24 +134,23 @@ function initMap() {
 }
 
 function refresh() {
-      while(markers.length > 0) {
-            removeMarker(markers.pop());
-        }
-        apiCall();
-}
 
-
-function filter() {
-      refresh();
-      for (marker in markers) {
-            for (filter in filters) {
-                  for(var i in types[filters[filter]]) {
-                        if (types[filters[filter]][i] === marker) {
-                              removeMarker(marker)
-                        }
-                  }
-            }
+            console.log(markers)
+      console.log("Refresh");
+      for (var i = 0; i < markers.length; i++) {
+            removeMarker(markers[i])
+            markers.splice(i, 1)
+            i--;
       }
+
+      markerClusterer.clearMarkers()
+      markerClusterer = null;
+
+      console.log(markers)
+
+
+      apiCall();
+
 }
 
 
@@ -241,6 +228,8 @@ function createMarker(address, title, icon, content, number) {
 
     markers.push(marker)
 
+    console.log(markers)
+
     return marker
 }
 
@@ -272,104 +261,6 @@ function httpGetAsync(theUrl, callback)
     xmlHttp.send(null);
 }
 
-var filters = []
-
-function toggleResources(resource) {
-    refresh()
-    var element = document.getElementById(resource + "-checkbox")
-    element.checked = !element.checked
-    switch(resource) {
-        case 'food':
-            console.log('food')
-            if (element.checked == false) {
-                  filters.push('Food')
-            } else {
-                  for (var i = 0; i < filters.length; i++) {
-                        if (filters[i] === 'Food') {
-                              if (i > -1) {
-                                  filters.splice(i, 1);
-                                  console.log("Removed");
-                              }
-                        }
-                  }
-            }
-            break;
-        case 'water':
-            console.log('water')
-            if (element.checked == false) {
-                  filters.push('Water')
-            } else {
-                  for (var i = 0; i < filters.length; i++) {
-                        if (filters[i] === 'Water') {
-                              if (i > -1) {
-                                  filters.splice(i, 1);
-                              }
-                        }
-                  }
-            }
-            break;
-        case 'medicine':
-            console.log('medicine')
-            if (element.checked == false) {
-                  filters.push('Medicine')
-            } else {
-                  for (var i = 0; i < filters.length; i++) {
-                        if (filters[i] === 'Medicine') {
-                              if (i > -1) {
-                                  filters.splice(i, 1);
-                              }
-                        }
-                  }
-            }
-            break;
-        case 'blankets':
-            console.log('blankets')
-            if (element.checked == false) {
-                  filters.push('Blankets')
-            } else {
-                  for (var i = 0; i < filters.length; i++) {
-                        if (filters[i] === 'Blankets') {
-                              if (i > -1) {
-                                  filters.splice(i, 1);
-                              }
-                        }
-                  }
-            }
-            break;
-        case 'toiletries':
-            console.log('toiletries')
-            if (element.checked == false) {
-                  filters.push('Toiletries')
-            } else {
-                  for (var i = 0; i < filters.length; i++) {
-                        if (filters[i] === 'Toiletries') {
-                              if (i > -1) {
-                                  filters.splice(i, 1);
-                              }
-                        }
-                  }
-            }
-            break;
-        case 'power':
-            console.log('power')
-            if (element.checked == false) {
-                  filters.push('Power')
-            } else {
-                  for (var i = 0; i < filters.length; i++) {
-                        if (filters[i] === 'Power') {
-                              if (i > -1) {
-                                  filters.splice(i, 1);
-                              }
-                        }
-                  }
-            }
-            break;
-        default:
-            console.log('default')
-    }
-
-      filter()
-}
 
 function apiCall() {
     var url = "http://7ecab5ef.ngrok.io"
@@ -380,29 +271,21 @@ function apiCall() {
             var marker = createMarker(json.data[i].location, "", null, json.data[i].text, json.data[i].phone_number)
             if (json.data[i].food) {
                 ++resources['Food']
-
-                types['Food'].push(marker)
-
             }
             if (json.data[i].water) {
                 ++resources['Water']
-                types['Water'].push(marker)
             }
             if (json.data[i].medicine) {
                 ++resources['Medicine']
-                types['Medicine'].push(marker)
             }
             if (json.data[i].blankets) {
                 ++resources['Blankets']
-                types['Blankets'].push(marker)
             }
             if (json.data[i].toiletries) {
                 ++resources['Toiletries']
-                types['Toiletries'].push(marker)
             }
             if (json.data[i].power) {
                 ++resources['Power']
-                types['Power'].push(marker)
             }
         }
         chart.update({
@@ -422,5 +305,6 @@ function apiCall() {
            {imagePath: 'https://googlemaps.github.io/js-marker-clusterer/images/m',
            gridSize: 10,
            minimumClusterSize: 2});
+
     })
 }
