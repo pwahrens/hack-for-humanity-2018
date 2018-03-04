@@ -2,9 +2,10 @@
 <html>
 <head>
     <title>Insight</title>
+    <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
-    <link rel="stylesheet" href="/static/map.css/">
+    <link rel="stylesheet" href="/static/map.css">
 
 </head>
 <body>
@@ -28,45 +29,6 @@
                         <div id="resource-graph" style="min-width: 310px; height: 400px; margin: 0 auto"></div>
                     </ul>
                 </li>
-                <li class="dropdown">
-                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">Toggle Resources<b class="caret"></b></a>
-                    <ul class="dropdown-menu">
-                        <li>
-                            <a class="dropdown-item">
-                                <form onSubmit="return false;" id="resourcesForm">
-                                    <div class="resource-checkbox" id="all" href="#">
-                                        <input type="checkbox" id="all" name="resource" value="all" checked>
-                                        <label for="all">All</label>
-                                    </div>
-                                    <div class="resource-checkbox" id="food">
-                                        <input type="checkbox" id="food" name="resource" value="food" checked>
-                                        <label for="food">Food</label>
-                                    </div>
-                                    <div class="resource-checkbox" id="water">
-                                        <input type="checkbox" id="water" name="resource" value="water" checked>
-                                        <label for="water">Water</label>
-                                    </div>
-                                    <div class="resource-checkbox" id="medicine">
-                                        <input type="checkbox" id="medicine" name="resource" value="medicine" checked>
-                                        <label for="medicine">Medicine</label>
-                                    </div>
-                                    <div class="resource-checkbox" id="blankets">
-                                        <input type="checkbox" id="blankets" name="resource" value="blankets" checked>
-                                        <label for="blankets">Blankets</label>
-                                    </div>
-                                    <div class="resource-checkbox" id="toiletries">
-                                        <input type="checkbox" id="toiletries" name="resource" value="toiletries" checked>
-                                        <label for="toiletries">Toiletries</label>
-                                    </div>
-                                    <div class="resource-checkbox" id="power">
-                                        <input type="checkbox" id="power" name="resource" value="power" checked>
-                                        <label for="power">Power</label>
-                                    </div>
-                                </form>
-                            </a>
-                        </li>
-                    </ul>
-                </li>
             </ul>
             <form class="navbar-form" role="search" onSubmit="return false;" id="locationForm">
                 <div class="input-group-btn">
@@ -84,7 +46,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
     <script src="https://code.highcharts.com/highcharts.js"></script>
-    <script src="/static/scripts.js/"></script>
+    <script src="/static/scripts.js"></script>
     <script src="https://developers.google.com/maps/documentation/javascript/examples/markerclusterer/markerclusterer.js"> -->
     </script>
     <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/markerclustererplus/2.1.4/markerclusterer.min.js">

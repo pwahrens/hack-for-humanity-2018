@@ -5,12 +5,14 @@ var markers = []
 var resources = {}
 var markerClusterer
 
+
 resources['Food'] = 0
 resources['Water'] = 0
 resources['Medicine'] = 0
 resources['Blankets'] = 0
 resources['Toiletries'] = 0
 resources['Power'] = 0
+
 
 // Highcharts for the resource graph
 var chart = Highcharts.chart('resource-graph', {
@@ -109,16 +111,10 @@ function initMap() {
     });
 
 
-    document.getElementById('refreshButton').addEventListener('click', refresh());
+    document.getElementById('refreshButton').addEventListener('click', function() {
+          refresh();
+   });
 
-    var checkboxes = document.getElementsByClassName("resource-checkbox")
-
-    for (var i = 0; i < checkboxes.length; ++i) {
-        checkboxes[i].addEventListener('click', function() {
-            console.log(this.id)
-
-        })
-    }
 
     map.data.setStyle(function(feature) {
         var magnitude = feature.getProperty('mag');
@@ -127,15 +123,35 @@ function initMap() {
         };
     });
 
+    var checkboxes = document.getElementsByClassName("resource-checkbox")
+
+    for (var i = 0; i < checkboxes.length; i++) {
+          checkboxes[i].addEventListener('click', function() {
+                      toggleResources(this.id)
+                  })
+    }
+
 }
 
 function refresh() {
-      while(markers.length > 0) {
-            removeMarker(markers.pop());
-        }
-        apiCall();
-}
 
+            console.log(markers)
+      console.log("Refresh");
+      for (var i = 0; i < markers.length; i++) {
+            removeMarker(markers[i])
+            markers.splice(i, 1)
+            i--;
+      }
+
+      markerClusterer.clearMarkers()
+      markerClusterer = null;
+
+      console.log(markers)
+
+
+      apiCall();
+
+}
 
 
 function getCircle(magnitude) {
@@ -212,6 +228,8 @@ function createMarker(address, title, icon, content, number) {
 
     markers.push(marker)
 
+    console.log(markers)
+
     return marker
 }
 
@@ -243,12 +261,14 @@ function httpGetAsync(theUrl, callback)
     xmlHttp.send(null);
 }
 
+
 function apiCall() {
     var url = "http://7ecab5ef.ngrok.io"
     httpGetAsync(url + "/server/main/", function(response){
         var json = JSON.parse(response)
         for (var i in json.data) {
-            createMarker(json.data[i].location, "", null, json.data[i].text, json.data[i].phone_number)
+
+            var marker = createMarker(json.data[i].location, "", null, json.data[i].text, json.data[i].phone_number)
             if (json.data[i].food) {
                 ++resources['Food']
             }
@@ -285,5 +305,6 @@ function apiCall() {
            {imagePath: 'https://googlemaps.github.io/js-marker-clusterer/images/m',
            gridSize: 10,
            minimumClusterSize: 2});
+
     })
 }
