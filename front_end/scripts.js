@@ -109,12 +109,7 @@ function initMap() {
     });
 
 
-    document.getElementById('refreshButton').addEventListener('click', function() {
-          while(markers.length > 0) {
-                removeMarker(markers.pop());
-            }
-            apiCall();
-    });
+    document.getElementById('refreshButton').addEventListener('click', refresh());
 
     var checkboxes = document.getElementsByClassName("resource-checkbox")
 
@@ -133,6 +128,15 @@ function initMap() {
     });
 
 }
+
+function refresh() {
+      while(markers.length > 0) {
+            removeMarker(markers.pop());
+        }
+        apiCall();
+}
+
+
 
 function getCircle(magnitude) {
     return {
