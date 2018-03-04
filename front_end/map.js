@@ -1,6 +1,6 @@
 var map;
 var geocoder;
-
+var markers = []
 
 
 function initMap() {
@@ -24,7 +24,7 @@ function initMap() {
     geocoder = new google.maps.Geocoder();
 
     // Create a <script> tag and set the USGS URL as the source.
-    var script = document.createElement('script');
+    //var script = document.createElement('script');
 
     document.getElementById('searchButton').addEventListener('click', function() {
         geocodeAddress(geocoder, map);
@@ -32,10 +32,10 @@ function initMap() {
 
     // This example uses a local copy of the GeoJSON stored at
     // http://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/2.5_week.geojsonp
-    script.src = 'data.js';
-    document.getElementsByTagName('head')[0].appendChild(script);
+    //script.src = 'data.js';
+    //document.getElementsByTagName('head')[0].appendChild(script);
 
-    var markers = []
+
     var marker
     for (var i in data.locations) {
         var location = data.locations[i]
@@ -46,10 +46,6 @@ function initMap() {
             location.icon,
             location.content
         )
-
-        if (marker != null) {
-            markers.push(marker)
-       }
     }
 
     var markerCluster = new MarkerClusterer(map, markers,
@@ -63,7 +59,6 @@ function initMap() {
             };
       });
 
-      console.log(markers);
 }
 
 function getCircle(magnitude) {
@@ -102,7 +97,8 @@ function geocodeAddress(geocoder, resultsMap) {
 
 function createMarker(address, title, icon, content) {
 
-      var contentString = '<div id="content">'+
+      var contentString = '<!----' + + '---->' +
+      '<div id="content">'+
       '<div id="siteNotice">'+
             '</div>'+
                   '<h2 id="firstHeading" class="firstHeading">'+title+'</h2>'+
@@ -115,12 +111,18 @@ function createMarker(address, title, icon, content) {
     var infowindow = new google.maps.InfoWindow({
            content: contentString
     });
+
     var marker = new google.maps.Marker()
 
     geocoder.geocode({'address': address}, function(results, status) {
+          if (results === null) {
+                return;
+          }
+
         var position = results[0].geometry.location
 
-        marker.setPosition(position)
+
+        marker.setPosition(new google.maps.LatLng(position.lat(), position.lng()))
         marker.setTitle(title)
         marker.setIcon(icon)
         marker.setMap(map)
@@ -131,6 +133,8 @@ function createMarker(address, title, icon, content) {
         })
 
        })
+
+       markers.push(marker)
 
     return marker
 }
@@ -157,7 +161,6 @@ function httpGetAsync(theUrl, callback)
     }
 
     xmlHttp.open("GET", theUrl, true); // true for asynchronous
-    //xmlHttp.setRequestHeader('Access-Control-Allow-Origin', '*');
     xmlHttp.send(null);
 }
 
@@ -166,6 +169,7 @@ function apiCall() {
       httpGetAsync(url + "/server/main/", function(response){
             var json = JSON.parse(response)
             for (var i in json.data) {
+
                   createMarker(json.data[i].location, "", null, json.data[i].text)
 
               }
