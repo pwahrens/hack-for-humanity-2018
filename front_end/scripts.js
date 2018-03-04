@@ -108,12 +108,23 @@ function initMap() {
         geocodeAddress(geocoder, map);
     });
 
+<<<<<<< HEAD
     document.getElementById('refreshButton').addEventListener('click', function() {
           while(markers.length > 0) {
                 removeMarker(markers.pop());
             }
             apiCall();
     });
+=======
+    var checkboxes = document.getElementsByClassName("resource-checkbox")
+
+    for (var i = 0; i < checkboxes.length; ++i) {
+        checkboxes[i].addEventListener('click', function() {
+            console.log(this.id)
+
+        })
+    }
+>>>>>>> origin/master
 
     map.data.setStyle(function(feature) {
         var magnitude = feature.getProperty('mag');
@@ -142,13 +153,10 @@ function eqfeed_callback(results) {
 
 
 function geocodeAddress(geocoder, resultsMap) {
-
     var address = document.getElementById('locationInput').value;
-
     geocoder.geocode({'address': address}, function(results, status) {
         if (status === 'OK') {
             resultsMap.setCenter(results[0].geometry.location);
-
             resultsMap.fitBounds(results[0].geometry.viewport);
         } else {
             if (status == 'ZERO_RESULTS') {
@@ -209,15 +217,15 @@ function removeMarker(marker) {
     marker = null;
 }
 
-    // api
-    function httpGetAsync(theUrl, callback) {
-        var xmlHttp = new XMLHttpRequest();
-        xmlHttp.onreadystatechange = function() {
-            if (xmlHttp.readyState == 4 && xmlHttp.status == 200) {
-                  callback(xmlHttp.responseText);
-            }
+// api
+function httpGetAsync(theUrl, callback) {
+    var xmlHttp = new XMLHttpRequest();
+    xmlHttp.onreadystatechange = function() {
+        if (xmlHttp.readyState == 4 && xmlHttp.status == 200) {
+            callback(xmlHttp.responseText);
         }
- }
+    }
+}
 
 // api
 function httpGetAsync(theUrl, callback)

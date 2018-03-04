@@ -32,15 +32,36 @@
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown">Toggle Resources<b class="caret"></b></a>
                     <ul class="dropdown-menu">
                         <li>
-                            <a class="dropdown-item" href="#">
+                            <a class="dropdown-item">
                                 <form onSubmit="return false;" id="resourcesForm">
-                                    <input class="resource-checkbox" type="checkbox" value="Food">Food<br>
-                                    <input class="resource-checkbox" type="checkbox" value="Water">Water<br>
-                                    <input class="resource-checkbox" type="checkbox" value="Medicine">Medicine<br>
-                                    <input class="resource-checkbox" type="checkbox" value="Blankets">Blankets<br>
-                                    <input class="resource-checkbox" type="checkbox" value="Toiletries">Toiletries<br>
-                                    <input class="resource-checkbox" type="checkbox" value="Power">Power<br>
-                                    <input class="resource-checkbox" type="submit" value="Submit">
+                                    <div class="resource-checkbox" id="all" href="#">
+                                        <input type="checkbox" id="all" name="resource" value="all" checked>
+                                        <label for="all">All</label>
+                                    </div>
+                                    <div class="resource-checkbox" id="food">
+                                        <input type="checkbox" id="food" name="resource" value="food" checked>
+                                        <label for="food">Food</label>
+                                    </div>
+                                    <div class="resource-checkbox" id="water">
+                                        <input type="checkbox" id="water" name="resource" value="water" checked>
+                                        <label for="water">Water</label>
+                                    </div>
+                                    <div class="resource-checkbox" id="medicine">
+                                        <input type="checkbox" id="medicine" name="resource" value="medicine" checked>
+                                        <label for="medicine">Medicine</label>
+                                    </div>
+                                    <div class="resource-checkbox" id="blankets">
+                                        <input type="checkbox" id="blankets" name="resource" value="blankets" checked>
+                                        <label for="blankets">Blankets</label>
+                                    </div>
+                                    <div class="resource-checkbox" id="toiletries">
+                                        <input type="checkbox" id="toiletries" name="resource" value="toiletries" checked>
+                                        <label for="toiletries">Toiletries</label>
+                                    </div>
+                                    <div class="resource-checkbox" id="power">
+                                        <input type="checkbox" id="power" name="resource" value="power" checked>
+                                        <label for="power">Power</label>
+                                    </div>
                                 </form>
                             </a>
                         </li>
@@ -67,9 +88,9 @@
     <script src="https://developers.google.com/maps/documentation/javascript/examples/markerclusterer/markerclusterer.js"> -->
     </script>
     <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/markerclustererplus/2.1.4/markerclusterer.min.js">
-    </script> -->
-    <script async defer
-    src="https://maps.googleapis.com/maps/api/js?key=AIzaSyB-9KholF1KzdWUplf03KdU49HOBJh4zF8&callback=initMap">
-    </script>
+</script> -->
+<script async defer
+src="https://maps.googleapis.com/maps/api/js?key=AIzaSyB-9KholF1KzdWUplf03KdU49HOBJh4zF8&callback=initMap">
+</script>
 </body>
 </html>
