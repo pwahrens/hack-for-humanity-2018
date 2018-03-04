@@ -1,12 +1,11 @@
 # Django imports
 from django.http import HttpResponse
 from django.views.decorators.csrf import csrf_exempt
-
+from twilio.rest import Client
 # Twilio imports
 from twilio.twiml.messaging_response import MessagingResponse
-from twilio.rest import Client
 
-from . import database
+from . import database, parser
 
 # Secret text
 filename = "server\\secrets.txt"
@@ -53,10 +52,14 @@ def sms_response(request):
         # If in response, send second message and update dictionary with location.
         msg = resp.message("Received. We have processed your request")
         response[received_sender][2] = received_message
+        need_bool = parser.parserequest(response[received_sender][1])
         database.database(
             response[received_sender][0],
             response[received_sender][1],
-            response[received_sender][2]
+            response[received_sender][2],
+            need_bool['food'],
+            need_bool['water'],
+            need_bool['medicine']
         )
 
     # Return the message to Twilio.

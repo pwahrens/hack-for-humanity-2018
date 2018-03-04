@@ -5,8 +5,8 @@ from . import models
 
 
 @csrf_exempt
-def database(phone_number, text, location):
-    b = models.Message(phone_number=phone_number, text=text, location=location, food=False, water=False, medicine=False)
+def database(phone_number, text, location, food, water, medicine):
+    b = models.Message(phone_number=phone_number, text=text, location=location, food=food, water=water, medicine=medicine)
     b.save()
 
     all_messages = list(models.Message.objects.all())
