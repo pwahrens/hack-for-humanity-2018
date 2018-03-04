@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
     <link rel="stylesheet" href="map.css">
+
 </head>
 <body>
     <nav class="navbar navbar-default" role="navigation">
@@ -21,7 +22,7 @@
         <!-- Collect the nav links, forms, and other content for toggling -->
         <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
             <div class="col-sm-3 col-md-3">
-                <form class="navbar-form" role="search" onsubmit="return search()">
+                <form class="navbar-form" role="search">
                     <div class="input-group-btn">
                         <input type="text" class="form-control" placeholder="Location name" "q" id="locationInput">
                         <button id="searchButton" class="btn btn-default" type="button"><i class="glyphicon glyphicon-search"></i></button>
@@ -35,7 +36,8 @@
 
     <script src="data.js"></script>
     <script src="map.js"></script>
-    <script src="https://developers.google.com/maps/documentation/javascript/examples/markerclusterer/markerclusterer.js"></script>
+    <script src="https://developers.google.com/maps/documentation/javascript/examples/markerclusterer/markerclusterer.js">
+    </script>
     <script async defer
     src="https://maps.googleapis.com/maps/api/js?key=AIzaSyB-9KholF1KzdWUplf03KdU49HOBJh4zF8&callback=initMap">
     </script>
