@@ -93,7 +93,7 @@ function initMap() {
                 }
             }
         }
-    });
+    );
 }
 
 function createMarker(address, title, icon, content, number) {
@@ -117,25 +117,6 @@ function createMarker(address, title, icon, content, number) {
     });
 
     var marker = new google.maps.Marker()
-
-    function createMarker(address, title, icon, content) {
-        var contentString = '<!----' + + '---->' +
-        '<div id="content">'+
-        '<div id="siteNotice">'+
-        '</div>'+
-        '<h2 id="firstHeading" class="firstHeading">'+title+'</h2>'+
-        '<h2 id="firstHeading" class="firstHeading">'+''+'</h2>'+
-        '<div id="bodyContent">'+
-        '<p>'+content+'</p>'
-        '</div>'+
-        '</div>';
-
-        var infowindow = new google.maps.InfoWindow({
-            content: contentString
-        });
-
-        var marker = new google.maps.Marker()
-
         geocoder.geocode({'address': address}, function(results, status) {
             if (results === null) {
                 return;
@@ -189,7 +170,7 @@ function createMarker(address, title, icon, content, number) {
         httpGetAsync(url + "/server/main/", function(response){
             var json = JSON.parse(response)
             for (var i in json.data) {
-                createMarker(json.data[i].location, "", null, json.data[i].text)
+                createMarker(json.data[i].location, "", null, json.data[i].text, json.data[i].phone_number)
                 if (json.data[i].food) {
                     ++resources['Food']
                 }
