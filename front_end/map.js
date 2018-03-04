@@ -1,5 +1,6 @@
 var map;
 var geocoder;
+var markers = []
 
 function initMap() {
     document.getElementById('locationInput').addEventListener('keypress', function (e) {
@@ -32,7 +33,7 @@ function initMap() {
     script.src = 'data.js';
     document.getElementsByTagName('head')[0].appendChild(script);
 
-    var markers = []
+
     var marker
     for (var i in data.locations) {
         var location = data.locations[i]
@@ -44,7 +45,7 @@ function initMap() {
             location.content
         )
 
-        markers.push(marker)
+
     }
 
 
@@ -97,13 +98,9 @@ function geocodeAddress(geocoder, resultsMap) {
             }
         }
     });
-    return resultsMap.center
 }
 
-<<<<<<< HEAD
 function createMarker(address, title, icon, content) {
-=======
-function createMarker(position, title, icon, content) {
 
       var contentString = '<div id="content">'+
       '<div id="siteNotice">'+
@@ -115,37 +112,29 @@ function createMarker(position, title, icon, content) {
             '</div>'+
       '</div>';
 
->>>>>>> d232ce2b39efacacbe3e1354767be472823ae518
     var infowindow = new google.maps.InfoWindow({
            content: contentString
     });
 
-    var position
-
-    /*
     geocoder.geocode({'address': address}, function(results, status) {
-        console.log(results[0].geometry.location)
-        position.push(results[0].geometry.location)
+        var position = results[0].geometry.location
+
+        var marker = new google.maps.Marker({
+            position: position,
+            map: map,
+            title: title,
+            icon: icon
+        })
+
+        marker.addListener('click', function() {
+            infowindow.open(map, marker)
+        })
+
+        marker.setMap(map)
+        markers.push(marker)
+
+        return marker
     })
-
-    console.log(position[0])
-    */
-
-    var marker = new google.maps.Marker({
-        position: position,
-        map: map,
-        title: title,
-        icon: icon
-    })
-
-
-    marker.addListener('click', function() {
-        infowindow.open(map, marker)
-    })
-
-    marker.setMap(map)
-
-    return marker
 }
 
 function removeMarker(marker) {
