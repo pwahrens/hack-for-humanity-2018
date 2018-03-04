@@ -1,4 +1,5 @@
 var map;
+var geocoder;
 
 function initMap() {
     document.getElementById('locationInput').addEventListener('keypress', function (e) {
@@ -16,11 +17,10 @@ function initMap() {
         mapTypeId: 'terrain'
     });
 
+    geocoder = new google.maps.Geocoder();
+
     // Create a <script> tag and set the USGS URL as the source.
     var script = document.createElement('script');
-
-
-    var geocoder = new google.maps.Geocoder();
 
     document.getElementById('searchButton').addEventListener('click', function() {
         geocodeAddress(geocoder, map);
@@ -35,7 +35,7 @@ function initMap() {
         var location = data.locations[i]
 
         marker = createMarker(
-            {lat: location.position.lat, lng: location.position.lng},
+            location.address,
             location.title,
             location.icon,
             location.content
@@ -95,10 +95,21 @@ function geocodeAddress(geocoder, resultsMap) {
     });
 }
 
-function createMarker(position, title, icon, content) {
+function createMarker(address, title, icon, content) {
     var infowindow = new google.maps.InfoWindow({
         content: content
     })
+
+    var position
+
+    /*
+    geocoder.geocode({'address': address}, function(results, status) {
+        console.log(results[0].geometry.location)
+        position.push(results[0].geometry.location)
+    })
+
+    console.log(position[0])
+    */
 
     var marker = new google.maps.Marker({
         position: position,
