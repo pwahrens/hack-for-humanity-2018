@@ -26,20 +26,20 @@ function initMap() {
         mapTypeId: 'terrain',
         center: new google.maps.LatLng(37.0902, -95.7129),
         mapTypeControl: true,
-          mapTypeControlOptions: {
-              style: google.maps.MapTypeControlStyle.HORIZONTAL_BAR,
-              position: google.maps.ControlPosition.TOP_CENTER
-          },
-          zoomControl: true,
-          zoomControlOptions: {
-              position: google.maps.ControlPosition.LEFT_CENTER
-          },
-          scaleControl: true,
-          streetViewControl: true,
-          streetViewControlOptions: {
-              position: google.maps.ControlPosition.LEFT_TOP
-          },
-          fullscreenControl: false
+        mapTypeControlOptions: {
+            style: google.maps.MapTypeControlStyle.HORIZONTAL_BAR,
+            position: google.maps.ControlPosition.TOP_CENTER
+        },
+        zoomControl: true,
+        zoomControlOptions: {
+            position: google.maps.ControlPosition.LEFT_CENTER
+        },
+        scaleControl: true,
+        streetViewControl: true,
+        streetViewControlOptions: {
+            position: google.maps.ControlPosition.LEFT_TOP
+        },
+        fullscreenControl: false
     });
 
     geocoder = new google.maps.Geocoder();
@@ -93,53 +93,34 @@ function initMap() {
                 }
             }
         }
-    });
+    );
 }
 
 function createMarker(address, title, icon, content, number) {
 
-      var contentString = '<!----' + 'Hello' + '---->' +
-      '<div id="content">'+
-      '<div id="siteNotice">'+
-            '</div>'+
-                  '<h2 id="firstHeading" class="firstHeading">'+title+'</h2>'+
-                  '<h3>'+content+'</h3>' +
-                  '<div id="bodyContent">'+
-                        '<p id="secondHeading" class="firstHeading">'+number+'</p>'+
-                  '</div>'
+    var contentString = '<!----' + 'Hello' + '---->' +
+    '<div id="content">'+
+    '<div id="siteNotice">'+
+    '</div>'+
+    '<h2 id="firstHeading" class="firstHeading">'+title+'</h2>'+
+    '<h3>'+content+'</h3>' +
+    '<div id="bodyContent">'+
+    '<p id="secondHeading" class="firstHeading">'+number+'</p>'+
+    '</div>'
 
-            '</div>'+
-      '</div>';
+    '</div>'+
+    '</div>';
 
 
     var infowindow = new google.maps.InfoWindow({
-           content: contentString
+        content: contentString
     });
 
     var marker = new google.maps.Marker()
-
-    function createMarker(address, title, icon, content) {
-        var contentString = '<!----' + + '---->' +
-        '<div id="content">'+
-        '<div id="siteNotice">'+
-        '</div>'+
-        '<h2 id="firstHeading" class="firstHeading">'+title+'</h2>'+
-        '<h2 id="firstHeading" class="firstHeading">'+''+'</h2>'+
-        '<div id="bodyContent">'+
-        '<p>'+content+'</p>'
-        '</div>'+
-        '</div>';
-
-        var infowindow = new google.maps.InfoWindow({
-            content: contentString
-        });
-
-        var marker = new google.maps.Marker()
-
-        geocoder.geocode({'address': address}, function(results, status) {
-            if (results === null) {
-                return;
-            }
+    geocoder.geocode({'address': address}, function(results, status) {
+        if (results === null) {
+            return;
+        }
 
 
         marker.setPosition(results[0].geometry.location)
@@ -148,66 +129,110 @@ function createMarker(address, title, icon, content, number) {
         marker.setMap(map)
         // marker.setAnimation(google.maps.Animation.DROP)
 
-            marker.addListener('click', function() {
-                infowindow.open(map, marker)
-            })
-
+        marker.addListener('click', function() {
+            infowindow.open(map, marker)
         })
 
-        markers.push(marker)
+    })
 
-        return marker
+    markers.push(marker)
+
+    return marker
+}
+
+function removeMarker(marker) {
+    marker.setMap(null)
+    marker = null;
+}
+
+// prevent multitouch
+function touchHandler(event){
+    if(event.touches.length > 1){
+        event.preventDefault()
+    }
+}
+
+// api
+function httpGetAsync(theUrl, callback)
+{
+    var xmlHttp = new XMLHttpRequest();
+    xmlHttp.onreadystatechange = function() {
+        if (xmlHttp.readyState == 4 && xmlHttp.status == 200)
+        callback(xmlHttp.responseText);
     }
 
-    function removeMarker(marker) {
-        marker.setMap(null)
-        marker = null;
-    }
+    xmlHttp.open("GET", theUrl, true); // true for asynchronous
+    xmlHttp.send(null);
+}
 
-    // prevent multitouch
-    function touchHandler(event){
-        if(event.touches.length > 1){
-            event.preventDefault()
-        }
-    }
-
-    // api
-    function httpGetAsync(theUrl, callback)
-    {
-        var xmlHttp = new XMLHttpRequest();
-        xmlHttp.onreadystatechange = function() {
-            if (xmlHttp.readyState == 4 && xmlHttp.status == 200)
-            callback(xmlHttp.responseText);
-        }
-
-        xmlHttp.open("GET", theUrl, true); // true for asynchronous
-        xmlHttp.send(null);
-    }
-
-    function apiCall() {
-        var url = "http://0c03c9c8.ngrok.io"
-        httpGetAsync(url + "/server/main/", function(response){
-            var json = JSON.parse(response)
-            for (var i in json.data) {
-                createMarker(json.data[i].location, "", null, json.data[i].text)
-                if (json.data[i].food) {
-                    ++resources['Food']
-                }
-                if (json.data[i].water) {
-                    ++resources['Water']
-                }
-                if (json.data[i].medicine) {
-                    ++resources['Medicine']
-                }
-                if (json.data[i].blankets) {
-                    ++resources['Blankets']
-                }
-                if (json.data[i].toiletries) {
-                    ++resources['Toiletries']
-                }
-                if (json.data[i].power) {
-                    ++resources['Power']
-                }
+function apiCall() {
+    var url = "http://0c03c9c8.ngrok.io"
+    httpGetAsync(url + "/server/main/", function(response){
+        var json = JSON.parse(response)
+        for (var i in json.data) {
+            createMarker(json.data[i].location, "", null, json.data[i].text, json.data[i].phone_number)
+            if (json.data[i].food) {
+                ++resources['Food']
             }
-        })
-    }
+            if (json.data[i].water) {
+                ++resources['Water']
+            }
+            if (json.data[i].medicine) {
+                ++resources['Medicine']
+            }
+            if (json.data[i].blankets) {
+                ++resources['Blankets']
+            }
+            if (json.data[i].toiletries) {
+                ++resources['Toiletries']
+            }
+            if (json.data[i].power) {
+                ++resources['Power']
+            }
+        }
+    })
+}
+
+// Highcharts for the resource graph
+Highcharts.chart('resource-graph', {
+    chart: {
+        type: 'column'
+    },
+    title: {
+        text: 'Needed Resources'
+    },
+    xAxis: {
+        categories: [
+            'Food',
+            'Water',
+            'Medicine',
+            'Blankets',
+            'Toiletries',
+            'Power'
+        ],
+        crosshair: true
+    },
+    yAxis: {
+        min: 0,
+        title: {
+            text: 'Quantity (#)'
+        }
+    },
+    plotOptions: {
+        column: {
+            pointPadding: 0.2,
+            borderWidth: 0
+        }
+    },
+    series: [{
+        name: 'Resources',
+        data: [
+            resources['Food'],
+            resources['Water'],
+            resources['Medicine'],
+            resources['Blankets'],
+            resources['Toiletries'],
+            resources['Power']
+        ]
+    }]
+});
