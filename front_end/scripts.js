@@ -98,12 +98,24 @@ function initMap() {
         },
         fullscreenControl: false
     });
-    
+
     geocoder = new google.maps.Geocoder();
 
     document.getElementById('searchButton').addEventListener('click', function() {
         geocodeAddress(geocoder, map);
     });
+
+    /*
+
+    var checkboxes = document.getElementsByClassName('resource-checkbox')
+
+    for (var i = 0; i < checkboxes.length; ++i) {
+        checkboxes[i].addEventListener('click', function() {
+            console.log("HELLO")
+        });
+    }
+
+    */
 
     var markerCluster = new MarkerClusterer(map, markers,
         {imagePath: 'https://developers.google.com/maps/documentation/javascript/examples/markerclusterer/m'}
