@@ -2,7 +2,7 @@
  * element that contains the map. */
 #map {
   height: calc(100% - 39pt);
-  margin-top: 39pt;
+  margin: 39pt 0 0 0;
 }
 /* Optional: Makes the sample page fill the window. */
 html, body {
@@ -14,12 +14,14 @@ html, body {
 
 .navbar {
 	position: fixed;
-	top: 0;
 	left: 0;
 	z-index: 1000000;
 	width: 100%;
 }
 
+.resource-checkbox {
+    margin: 6pt 0 6pt 0 !important;
+}
 
 .container {
 	width: 100%;
