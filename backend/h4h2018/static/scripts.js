@@ -3,7 +3,7 @@ var map;
 var geocoder;
 var markers = []
 var resources = {}
-var markerClusterer
+var markerClusterer;
 
 
 resources['Food'] = 0
@@ -72,7 +72,6 @@ var chart = Highcharts.chart('resource-graph', {
 });
 
 function initMap() {
-    apiCall();
 
     document.getElementById('locationInput').addEventListener('keypress', function (e) {
         var key = e.which || e.keyCode;
@@ -131,26 +130,26 @@ function initMap() {
                   })
     }
 
+    apiCall();
+
 }
 
 function refresh() {
-
-            console.log(markers)
-      console.log("Refresh");
-      for (var i = 0; i < markers.length; i++) {
-            removeMarker(markers[i])
-            markers.splice(i, 1)
-            i--;
-      }
-
-      markerClusterer.clearMarkers()
-      markerClusterer = null;
-
-      console.log(markers)
-
-
-      apiCall();
-
+      location.reload();
+      // console.log("Refresh");
+      //
+      //
+      // for (var i = 0; i < markers.length; i++) {
+      //       removeMarker(markers[i])
+      //       markers.splice(i, 1)
+      //       i--;
+      // }
+      //
+      // markerClusterer.clearMarkers()
+      // delete markerClusterer;
+      // console.log(markers)
+      //
+      // apiCall();
 }
 
 
@@ -228,7 +227,7 @@ function createMarker(address, title, icon, content, number) {
 
     markers.push(marker)
 
-    console.log(markers)
+
 
     return marker
 }
@@ -288,6 +287,14 @@ function apiCall() {
                 ++resources['Power']
             }
         }
+
+        console.log(markers);
+
+        markerClusterer = new MarkerClusterer(map, markers,
+          {imagePath: 'https://googlemaps.github.io/js-marker-clusterer/images/m',
+          gridSize: 10,
+          minimumClusterSize: 2});
+
         chart.update({
             series: [{
                 data: [
@@ -301,10 +308,8 @@ function apiCall() {
             }]
         });
 
-        markerClusterer = new MarkerClusterer(map, markers,
-           {imagePath: 'https://googlemaps.github.io/js-marker-clusterer/images/m',
-           gridSize: 10,
-           minimumClusterSize: 2});
+
 
     })
+
 }
