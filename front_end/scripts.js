@@ -108,14 +108,14 @@ function initMap() {
         geocodeAddress(geocoder, map);
     });
 
-<<<<<<< HEAD
+
     document.getElementById('refreshButton').addEventListener('click', function() {
           while(markers.length > 0) {
                 removeMarker(markers.pop());
             }
             apiCall();
     });
-=======
+
     var checkboxes = document.getElementsByClassName("resource-checkbox")
 
     for (var i = 0; i < checkboxes.length; ++i) {
@@ -124,7 +124,6 @@ function initMap() {
 
         })
     }
->>>>>>> origin/master
 
     map.data.setStyle(function(feature) {
         var magnitude = feature.getProperty('mag');
