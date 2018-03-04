@@ -16,9 +16,23 @@ function initMap() {
 
     map = new google.maps.Map(document.getElementById('map'), {
         zoom: 4,
-        center: {lat:  37.0902, lng: -95.7129},
-
-        mapTypeId: 'terrain'
+        mapTypeId: 'terrain',
+        center: new google.maps.LatLng(37.0902, -95.7129),
+        mapTypeControl: true,
+          mapTypeControlOptions: {
+              style: google.maps.MapTypeControlStyle.HORIZONTAL_BAR,
+              position: google.maps.ControlPosition.TOP_CENTER
+          },
+          zoomControl: true,
+          zoomControlOptions: {
+              position: google.maps.ControlPosition.LEFT_CENTER
+          },
+          scaleControl: true,
+          streetViewControl: true,
+          streetViewControlOptions: {
+              position: google.maps.ControlPosition.LEFT_TOP
+          },
+          fullscreenControl: false
     });
 
     geocoder = new google.maps.Geocoder();
@@ -82,6 +96,7 @@ function geocodeAddress(geocoder, resultsMap) {
 
     geocoder.geocode({'address': address}, function(results, status) {
         if (status === 'OK') {
+
             resultsMap.setCenter(results[0].geometry.location);
 
             resultsMap.fitBounds(results[0].geometry.viewport);
@@ -95,18 +110,21 @@ function geocodeAddress(geocoder, resultsMap) {
     });
 }
 
-function createMarker(address, title, icon, content) {
+function createMarker(address, title, icon, content, number) {
 
-      var contentString = '<!----' + + '---->' +
+      var contentString = '<!----' + 'Hello' + '---->' +
       '<div id="content">'+
       '<div id="siteNotice">'+
             '</div>'+
                   '<h2 id="firstHeading" class="firstHeading">'+title+'</h2>'+
-                  '<h2 id="firstHeading" class="firstHeading">'+''+'</h2>'+
+                  '<h3>'+content+'</h3>' +
                   '<div id="bodyContent">'+
-                  '<p>'+content+'</p>'
+                        '<p id="secondHeading" class="firstHeading">'+number+'</p>'+
+                  '</div>'
+
             '</div>'+
       '</div>';
+
 
     var infowindow = new google.maps.InfoWindow({
            content: contentString
@@ -119,10 +137,8 @@ function createMarker(address, title, icon, content) {
                 return;
           }
 
-        var position = results[0].geometry.location
 
-
-        marker.setPosition(new google.maps.LatLng(position.lat(), position.lng()))
+        marker.setPosition(results[0].geometry.location)
         marker.setTitle(title)
         marker.setIcon(icon)
         marker.setMap(map)
@@ -169,8 +185,7 @@ function apiCall() {
       httpGetAsync(url + "/server/main/", function(response){
             var json = JSON.parse(response)
             for (var i in json.data) {
-
-                  createMarker(json.data[i].location, "", null, json.data[i].text)
+                  createMarker(json.data[i].location, "", null, json.data[i].text, json.data[i].phone_number)
 
               }
       })
