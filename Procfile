@@ -1,1 +1,1 @@
-web: gunicorn server.wsgi --log-file -
+web: gunicorn h4h2018.h4h2018 --log-file -
