@@ -1,7 +1,10 @@
+//file:///Users/MasonBruce/Desktop/hack-for-humanity-2018/front_end/map.html
 var map;
 var geocoder;
 var markers = []
 var resources = {}
+var markerClusterer
+
 resources['Food'] = 0
 resources['Water'] = 0
 resources['Medicine'] = 0
@@ -48,18 +51,10 @@ function initMap() {
         geocodeAddress(geocoder, map);
     });
 
-    var markerCluster = new MarkerClusterer(map, markers,
-        {imagePath: 'https://developers.google.com/maps/documentation/javascript/examples/markerclusterer/m'});
 
-        map.data.setStyle(function(feature) {
-            var magnitude = feature.getProperty('mag');
-
-            return {
-                icon: getCircle(magnitude)
-            };
-        });
 
     }
+
 
     function getCircle(magnitude) {
         return {
@@ -157,8 +152,9 @@ function createMarker(address, title, icon, content, number) {
     {
         var xmlHttp = new XMLHttpRequest();
         xmlHttp.onreadystatechange = function() {
-            if (xmlHttp.readyState == 4 && xmlHttp.status == 200)
-            callback(xmlHttp.responseText);
+            if (xmlHttp.readyState == 4 && xmlHttp.status == 200) {
+                  callback(xmlHttp.responseText);
+            }
         }
 
         xmlHttp.open("GET", theUrl, true); // true for asynchronous
@@ -166,10 +162,12 @@ function createMarker(address, title, icon, content, number) {
     }
 
     function apiCall() {
-        var url = "http://0c03c9c8.ngrok.io"
+        var url = "http://7ecab5ef.ngrok.io"
         httpGetAsync(url + "/server/main/", function(response){
             var json = JSON.parse(response)
+            console.log(json);
             for (var i in json.data) {
+
                 createMarker(json.data[i].location, "", null, json.data[i].text, json.data[i].phone_number)
                 if (json.data[i].food) {
                     ++resources['Food']
@@ -190,5 +188,29 @@ function createMarker(address, title, icon, content, number) {
                     ++resources['Power']
                 }
             }
+            markerClusterer = new MarkerClusterer(map, markers,
+                {imagePath: 'https://googlemaps.github.io/js-marker-clusterer/images/m',
+                gridSize: 10,
+                minimumClusterSize: 1});
         })
     }
+
+
+    // ajax
+    //
+    // var previous = null;
+    //     var current = null;
+    //     setInterval(function() {
+    //          var url = "http://7ecab5ef.ngrok.io"
+    //          httpGetAsync(url + "/server/main/", function(response) {
+    //                current = JSON.stringify(JSON.parse(response));
+    //                if (previous && current && previous !== current) {
+    //                    console.log('refresh');
+    //                    for (var i in markers) {
+    //                          removeMarker(markers[i]);
+    //                          apiCall();
+    //                    }
+    //                }
+    //                previous = current;
+    //          });
+    //   }, 20000000);
