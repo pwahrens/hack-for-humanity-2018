@@ -1,7 +1,6 @@
 .DS_Store
-*.pyc
-*.pyc
-backend/h4h2018/server/__pycache__/urls.cpython-36.pyc
+backend/h4h2018/server/*.pyc
+backend/h4h2018/server/__pycache__/*.pyc
+backend/h4h2018/server/migrations/__pycache__/*.pyc
 backend/h4h2018/.idea/workspace.xml
-backend/h4h2018/server/secrets
 backend/h4h2018/server/secrets.txt
