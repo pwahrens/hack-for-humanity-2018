@@ -1,10 +1,17 @@
 var map;
 var geocoder;
 var markers = []
+var resources = {}
+resources['Food'] = 0
+resources['Water'] = 0
+resources['Medicine'] = 0
+resources['Blankets'] = 0
+resources['Toiletries'] = 0
+resources['Power'] = 0
 
 
 function initMap() {
-      apiCall();
+    apiCall();
     document.getElementById('locationInput').addEventListener('keypress', function (e) {
         var key = e.which || e.keyCode;
 
@@ -23,155 +30,149 @@ function initMap() {
 
     geocoder = new google.maps.Geocoder();
 
-    // Create a <script> tag and set the USGS URL as the source.
-    //var script = document.createElement('script');
-
     document.getElementById('searchButton').addEventListener('click', function() {
         geocodeAddress(geocoder, map);
     });
 
-    // This example uses a local copy of the GeoJSON stored at
-    // http://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/2.5_week.geojsonp
-    //script.src = 'data.js';
-    //document.getElementsByTagName('head')[0].appendChild(script);
-
-
-    var marker
-    for (var i in data.locations) {
-        var location = data.locations[i]
-
-        marker = createMarker(
-            location.address,
-            location.title,
-            location.icon,
-            location.content
-        )
-    }
-
     var markerCluster = new MarkerClusterer(map, markers,
-              {imagePath: 'https://developers.google.com/maps/documentation/javascript/examples/markerclusterer/m'});
+        {imagePath: 'https://developers.google.com/maps/documentation/javascript/examples/markerclusterer/m'});
 
-      map.data.setStyle(function(feature) {
-          var magnitude = feature.getProperty('mag');
+        map.data.setStyle(function(feature) {
+            var magnitude = feature.getProperty('mag');
 
             return {
-                 icon: getCircle(magnitude)
+                icon: getCircle(magnitude)
             };
-      });
+        });
 
-}
+    }
 
-function getCircle(magnitude) {
-    return {
-        path: google.maps.SymbolPath.CIRCLE,
-        fillColor: 'red',
-        fillOpacity: .2,
-        scale: Math.pow(2, magnitude) / 2,
-        strokeColor: 'white',
-        strokeWeight: .5
-    };
-}
+    function getCircle(magnitude) {
+        return {
+            path: google.maps.SymbolPath.CIRCLE,
+            fillColor: 'red',
+            fillOpacity: .2,
+            scale: Math.pow(2, magnitude) / 2,
+            strokeColor: 'white',
+            strokeWeight: .5
+        };
+    }
 
-function eqfeed_callback(results) {
-    map.data.addGeoJson(results);
-}
+    function eqfeed_callback(results) {
+        map.data.addGeoJson(results);
+    }
 
-function geocodeAddress(geocoder, resultsMap) {
+    function geocodeAddress(geocoder, resultsMap) {
 
-    var address = document.getElementById('locationInput').value;
+        var address = document.getElementById('locationInput').value;
 
-    geocoder.geocode({'address': address}, function(results, status) {
-        if (status === 'OK') {
-            resultsMap.setCenter(results[0].geometry.location);
+        geocoder.geocode({'address': address}, function(results, status) {
+            if (status === 'OK') {
+                resultsMap.setCenter(results[0].geometry.location);
 
-            resultsMap.fitBounds(results[0].geometry.viewport);
-        } else {
-            if (status == 'ZERO_RESULTS') {
-                alert('No cities or countries found during query');
+                resultsMap.fitBounds(results[0].geometry.viewport);
             } else {
-                alert('We could not find the city and/or country for the following reason: ' + status);
+                if (status == 'ZERO_RESULTS') {
+                    alert('No cities or countries found during query');
+                } else {
+                    alert('We could not find the city and/or country for the following reason: ' + status);
+                }
             }
-        }
-    });
-}
+        });
+    }
 
-function createMarker(address, title, icon, content) {
+    function createMarker(address, title, icon, content) {
+        var contentString = '<!----' + + '---->' +
+        '<div id="content">'+
+        '<div id="siteNotice">'+
+        '</div>'+
+        '<h2 id="firstHeading" class="firstHeading">'+title+'</h2>'+
+        '<h2 id="firstHeading" class="firstHeading">'+''+'</h2>'+
+        '<div id="bodyContent">'+
+        '<p>'+content+'</p>'
+        '</div>'+
+        '</div>';
 
-      var contentString = '<!----' + + '---->' +
-      '<div id="content">'+
-      '<div id="siteNotice">'+
-            '</div>'+
-                  '<h2 id="firstHeading" class="firstHeading">'+title+'</h2>'+
-                  '<h2 id="firstHeading" class="firstHeading">'+''+'</h2>'+
-                  '<div id="bodyContent">'+
-                  '<p>'+content+'</p>'
-            '</div>'+
-      '</div>';
+        var infowindow = new google.maps.InfoWindow({
+            content: contentString
+        });
 
-    var infowindow = new google.maps.InfoWindow({
-           content: contentString
-    });
+        var marker = new google.maps.Marker()
 
-    var marker = new google.maps.Marker()
-
-    geocoder.geocode({'address': address}, function(results, status) {
-          if (results === null) {
+        geocoder.geocode({'address': address}, function(results, status) {
+            if (results === null) {
                 return;
-          }
+            }
 
-        var position = results[0].geometry.location
+            var position = results[0].geometry.location
 
 
-        marker.setPosition(new google.maps.LatLng(position.lat(), position.lng()))
-        marker.setTitle(title)
-        marker.setIcon(icon)
-        marker.setMap(map)
-        // marker.setAnimation(google.maps.Animation.DROP)
+            marker.setPosition(new google.maps.LatLng(position.lat(), position.lng()))
+            marker.setTitle(title)
+            marker.setIcon(icon)
+            marker.setMap(map)
+            // marker.setAnimation(google.maps.Animation.DROP)
 
-        marker.addListener('click', function() {
-            infowindow.open(map, marker)
+            marker.addListener('click', function() {
+                infowindow.open(map, marker)
+            })
+
         })
 
-       })
+        markers.push(marker)
 
-       markers.push(marker)
-
-    return marker
-}
-
-function removeMarker(marker) {
-    marker.setMap(null)
-    marker = null;
-}
-
-// prevent multitouch
-function touchHandler(event){
-    if(event.touches.length > 1){
-        event.preventDefault()
+        return marker
     }
-}
 
-// api
-function httpGetAsync(theUrl, callback)
-{
-    var xmlHttp = new XMLHttpRequest();
-    xmlHttp.onreadystatechange = function() {
-        if (xmlHttp.readyState == 4 && xmlHttp.status == 200)
+    function removeMarker(marker) {
+        marker.setMap(null)
+        marker = null;
+    }
+
+    // prevent multitouch
+    function touchHandler(event){
+        if(event.touches.length > 1){
+            event.preventDefault()
+        }
+    }
+
+    // api
+    function httpGetAsync(theUrl, callback)
+    {
+        var xmlHttp = new XMLHttpRequest();
+        xmlHttp.onreadystatechange = function() {
+            if (xmlHttp.readyState == 4 && xmlHttp.status == 200)
             callback(xmlHttp.responseText);
+        }
+
+        xmlHttp.open("GET", theUrl, true); // true for asynchronous
+        xmlHttp.send(null);
     }
 
-    xmlHttp.open("GET", theUrl, true); // true for asynchronous
-    xmlHttp.send(null);
-}
-
-function apiCall() {
-      var url = "http://0c03c9c8.ngrok.io"
-      httpGetAsync(url + "/server/main/", function(response){
+    function apiCall() {
+        var url = "http://0c03c9c8.ngrok.io"
+        httpGetAsync(url + "/server/main/", function(response){
             var json = JSON.parse(response)
             for (var i in json.data) {
-
-                  createMarker(json.data[i].location, "", null, json.data[i].text)
-
-              }
-      })
-}
+                createMarker(json.data[i].location, "", null, json.data[i].text)
+                if (json.data[i].food) {
+                    ++resources['Food']
+                }
+                if (json.data[i].water) {
+                    ++resources['Water']
+                }
+                if (json.data[i].medicine) {
+                    ++resources['Medicine']
+                }
+                if (json.data[i].blankets) {
+                    ++resources['Blankets']
+                }
+                if (json.data[i].toiletries) {
+                    ++resources['Toiletries']
+                }
+                if (json.data[i].power) {
+                    ++resources['Power']
+                }
+            }
+        })
+    }
