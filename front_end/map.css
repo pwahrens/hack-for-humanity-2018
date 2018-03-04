@@ -35,3 +35,8 @@ html, body {
 	margin-left: 10px;
 	border-radius: 10px;
 }
+
+#refreshButton {
+	
+	border-radius: 10px;
+}

@@ -108,6 +108,9 @@ function initMap() {
         geocodeAddress(geocoder, map);
     });
 
+
+    document.getElementById('refreshButton').addEventListener('click', refresh());
+
     var checkboxes = document.getElementsByClassName("resource-checkbox")
 
     for (var i = 0; i < checkboxes.length; ++i) {
@@ -125,6 +128,15 @@ function initMap() {
     });
 
 }
+
+function refresh() {
+      while(markers.length > 0) {
+            removeMarker(markers.pop());
+        }
+        apiCall();
+}
+
+
 
 function getCircle(magnitude) {
     return {
@@ -166,7 +178,7 @@ function createMarker(address, title, icon, content, number) {
     '<div id="content">'+
     '<div id="siteNotice">'+
     '</div>'+
-    '<h2 id="firstHeading" class="firstHeading">'+title+'</h2>'+
+    '<h3 id="firstHeading" class="firstHeading">'+title+'</h3>'+
     '<h3>'+content+'</h3>' +
     '<div id="bodyContent">'+
     '<p id="secondHeading" class="firstHeading">'+number+'</p>'+

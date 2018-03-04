@@ -7,7 +7,7 @@ def random_phone_number():
         n = str(random.randint(10**9, 10**10-1))
     return '+' + n
 
-cities= ['Santa Clara', 'San Jose', 'Mountain View', "San Mateo", "Los Altos", "Foster City", "Palo Alto", "Fremont", "Roseville"]
+cities= ['Santa Clara', 'San Jose', 'Mountain View', "San Mateo", "Los Altos", "Foster City", "Palo Alto", "Fremont"]
 locations = [x + ', California, US' for  x in cities]
 nums = list(range(1,7))
 requests = {'food': False, 'water': False, 'medicine': False, 'blankets': False, 'toiletries': False,'power':False}
@@ -22,7 +22,7 @@ def random_needs():
     return out
 
 def generate_entries(request):
-    for i in range(100):
+    for i in range(10):
         num = random_phone_number()
         loc = random_location()
         text = random_needs()
