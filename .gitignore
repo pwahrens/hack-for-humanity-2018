@@ -6,4 +6,3 @@ backend/h4h2018/server/__pycache__/*.pyc
 backend/h4h2018/server/migrations/__pycache__/*.pyc
 backend/h4h2018/.idea/workspace.xml
 backend/h4h2018/server/secrets.txt
-.DS_Store
