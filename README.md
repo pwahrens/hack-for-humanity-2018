@@ -12,9 +12,3 @@ Insight was a project completed during [Hack for Humanity 2018](http://hackforhu
 3) After refreshing, the frontend application will query the database for entries and plot them onto a map using Google Maps API. At this time, data for the Resource Graph is also updated.
 
 The result is a map filled with markers that help responders identify what resources are needed in certain locations.
-
-## Install Insight
-
-## Run Insight
-
-	python manage.py runserver
